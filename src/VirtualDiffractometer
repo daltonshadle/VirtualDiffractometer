@@ -1,0 +1,77 @@
+# **************************************************************************************************
+# Name:    VirtualDiffractometer.py
+# Purpose: Produces synthetic diffraction patterns and tiff files
+# Input:   Listed below under "Variable Definitions" section
+# Output:  Diffraction image tiff file
+# Notes:   - Ideal detector parameters only (i.e., only energy and
+#            sample-to-detector distance--no tilt, etc. )
+#          - Doesn't consider intensity parameters (e.g., structure factor)
+# **************************************************************************************************
+
+# ********************************************* Imports ********************************************
+from VirtDiffTools import *
+
+
+# *************************************** Variable Definitions *************************************
+
+# Detector_1 parameters (distance, energy, width, height)(mm, keV, pixel*e-4, pixel*e-4)
+detector_size = .4096
+Detector_1 = Detector(1012.36, detector_size, detector_size)
+
+# LabSource_1 parameters (energy, incomingXray) (keV, unitVector)
+LabSource_1 = LabSource(55.618, LabSource.lab_z)
+
+# unitCell_1 lattice parameters (a,b,c,alpha,beta,gamma) (Angstroms,degrees)
+unitCell_1 = UnitCell(np.array([2, 2, 2, 90, 90, 90]))
+
+# Grain_1 parameters (unitCell, dimension, COM, orientation, intensity)
+Grain_1 = Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0.0, 0.5, 0.0]),
+                np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3]), 100)
+Grain_1.rotmat2quat(np.identity(3))
+
+# Sample_1 parameters (grains in a list, omegaLow, omegaHigh, omegaStepSize) (degrees)
+Sample_1 = Sample(np.array([Grain_1]), 0, 180, 1)
+
+# hkl_list initialization
+hkl_list = np.matrix([[1, 0, 0],
+                     [0, 1, 0],
+                     [0, 0, 1]])
+
+
+# *************************************** Function Definitions *************************************
+def virtual_diffractometer(labsource, sample, hkl_list):
+    # **********************************************************************************************
+    # Name:    virtual_diffractometer
+    # Purpose: function that simulates a rotating virtual diffraction
+    #          experiment on a single sample
+    # Input:   none
+    # Output:  two_theta (n x 1 matrix) - matrix of two theta angles for n diffraction events
+    #          eta (n x 1 matrix) - matrix of eta angles for n events
+    #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events
+    # Notes:   none
+    # **********************************************************************************************
+
+    # temporarily set tempGrain to first grain of the sample
+    tempGrain = sample.grains[0]
+
+    # reciprocal lattice vectors in sample coordinate system
+    g_sample = tempGrain.quat2rotmat() * tempGrain.unitCell.get_reciprocal_lattice_vectors() \
+               * np.transpose(hkl_list)
+    g_sample_x = np.transpose(g_sample[0, :])
+    g_sample_y = np.transpose(g_sample[1, :])
+    g_sample_z = np.transpose(g_sample[2, :])
+
+    
+
+    return 0
+
+
+# ************************************* Main Function Definition ***********************************
+def main():
+    virtual_diffractometer(LabSource_1, Sample_1, hkl_list)
+
+    return 0
+
+
+# ************************************* Main Function Execution ************************************
+main()
