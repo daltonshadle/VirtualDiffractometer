@@ -9,7 +9,8 @@
 
 # ********************************************* Imports ********************************************
 import numpy as np
-import scipy
+import scipy.constants as sciconst
+import matplotlib.pyplot as plot
 
 
 # ***************************************** Class Definitions **************************************
@@ -19,7 +20,7 @@ import scipy
 class LabSource:
     # class variables
     beamEnergy = None            # Energy of beam (keV)
-    k_in_lab = np.zeros(3)       # Incoming wave vector in lab frame
+    k_in_lab = np.zeros(3)       # Incoming wave vector in lab frame (Angstroms)
     lab_x = np.array([1, 0, 0])  # Lab x-axis unit vector
     lab_y = np.array([0, 1, 0])  # Lab y-axis unit vector
     lab_z = np.array([0, 0, 1])  # Lab z-axis unit vector
@@ -27,7 +28,7 @@ class LabSource:
     # Constructor
     def __init__(self, energy_In, incoming_In):
         self.beamEnergy = energy_In
-        self.k_in_lab = incoming_In
+        self.k_in_lab = ((2 * sciconst.pi) / self.kev_2_angstroms()) * (-1 * incoming_In)
 
     # Other Functions
     def kev_2_angstroms(self):
@@ -39,7 +40,18 @@ class LabSource:
         # Notes:   none
         # ******************************************************************************************
 
-        return (scipy.h * scipy.c * 1e10) / (1000 * self.beamEnergy * scipy.e)  # Angstroms
+        return (sciconst.h * sciconst.c * 1e10) / (1000 * self.beamEnergy * sciconst.e)  # Angstroms
+
+    def kev_2_meters(self):
+        # ******************************************************************************************
+        # Name:    kev_2_meters
+        # Purpose: function that returns the wavelength of the beam energy in meters
+        # Input:   none
+        # Output:  wavelength (float) - wavelength of the beam energy photons
+        # Notes:   none
+        # ******************************************************************************************
+
+        return (sciconst.h * sciconst.c) / (1000 * self.beamEnergy * sciconst.e)  # meters
 
 
 # Class: Detector
@@ -84,6 +96,9 @@ class UnitCell:
 
     # Constructor
     def __init__(self, latticeParams_In):
+        # Round precision variable for lattice vectors
+        precision = 15
+
         self.latticeParams = latticeParams_In
         a = self.latticeParams[0]
         b = self.latticeParams[1]
@@ -93,13 +108,14 @@ class UnitCell:
         gamma = self.latticeParams[5]
 
         cx = c * np.cos(np.deg2rad(beta))
-        cy = c * (np.cos(np.deg2rad(alpha)) - np.cos(np.deg2rad(beta)) * np.cos(np.deg2rad(gamma)))\
-             / np.sin(np.deg2rad(gamma))
+        cy = (c * (np.cos(np.deg2rad(alpha)) - np.cos(np.deg2rad(beta)) * np.cos(np.deg2rad(gamma)))
+             / np.sin(np.deg2rad(gamma)))
         cz = np.sqrt(c**2 - cx**2 - cy**2)
 
-        self.a1 = a * np.array([1, 0, 0])
-        self.a2 = b * np.array([np.cos(np.deg2rad(gamma)), np.sin(np.deg2rad(gamma)), 0])
-        self.a3 = np.array([cx, cy, cz])
+        self.a1 = np.round(a * np.array([1, 0, 0]), precision)
+        self.a2 = np.round(b * np.array([np.cos(np.deg2rad(gamma)), np.sin(np.deg2rad(gamma)), 0]),
+                           precision)
+        self.a3 = np.round(np.array([cx, cy, cz]), precision)
         self.volume = np.dot(self.a1, np.cross(self.a2, self.a3))
 
     def get_reciprocal_lattice_vectors(self):
@@ -112,9 +128,9 @@ class UnitCell:
         # Notes:   none
         # ******************************************************************************************
 
-        b1 = ((2 * scipy.pi) / self.volume) * np.cross(self.a2, self.a3)
-        b2 = ((2 * scipy.pi) / self.volume) * np.cross(self.a3, self.a1)
-        b3 = ((2 * scipy.pi) / self.volume) * np.cross(self.a1, self.a2)
+        b1 = (2 / self.volume) * np.cross(self.a2, self.a3)
+        b2 = (2 / self.volume) * np.cross(self.a3, self.a1)
+        b3 = (2 / self.volume) * np.cross(self.a1, self.a2)
         return np.column_stack((b1, b2, b3))
 
 

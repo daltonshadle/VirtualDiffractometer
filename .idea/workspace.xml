@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36565a83-f9e2-4e2d-abc2-961cfd862929" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Shadle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/VirtDiffTools.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/VirtualDiffractometer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtDiffTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtDiffTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtualDiffractometer" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,10 +16,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/VirtDiffTools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="87" selection-start-line="87" selection-end-line="87" />
+            <state relative-caret-position="51">
+              <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
               <folding>
-                <element signature="e#497#515#0" expanded="true" />
+                <element signature="n#!!doc" />
+                <element signature="e#527#627#0" />
+                <element signature="e#1255#1347#0" />
+                <element signature="e#1835#1927#0" />
+                <element signature="e#1527#1544#0" />
+                <element signature="e#1782#2650#0" />
+                <element signature="e#949#1070#0" />
+                <element signature="e#2201#2650#0" />
+                <element signature="e#2332#2424#0" />
+                <element signature="e#2646#2663#0" />
+                <element signature="e#4145#4237#0" />
+                <element signature="e#4901#4915#0" />
+                <element signature="e#5088#7699#0" />
+                <element signature="e#5629#5654#0" />
+                <element signature="e#3196#3412#0" />
+                <element signature="e#5995#6862#0" />
+                <element signature="e#5995#6087#0" />
+                <element signature="e#4070#4236#0" />
+                <element signature="e#6918#7699#0" />
+                <element signature="e#6918#7010#0" />
+                <element signature="e#4313#4328#0" />
+                <element signature="e#7847#8545#0" />
+                <element signature="e#6190#6379#0" />
               </folding>
             </state>
           </provider>
@@ -31,8 +50,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1071">
-              <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
+            <state relative-caret-position="614">
+              <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#681#756#0" />
+                <element signature="e#1934#6776#0" />
+                <element signature="e#1964#2060#0" />
+                <element signature="e#5551#5674#0" />
+                <element signature="e#6042#6361#0" />
+                <element signature="e#5441#5609#0" />
+                <element signature="e#7472#8498#0" />
+                <element signature="e#7440#7536#0" />
+                <element signature="e#8359#8455#0" />
+                <element signature="e#3630#3709#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -156,12 +188,12 @@
     <frame x="-1088" y="-1153" width="1096" height="1896" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12759924" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18809074" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.11401021" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.40272263" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -177,27 +209,83 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/PhysicsConstants.py" />
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/matrixlib/defmatrix.py">
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/linalg/linalg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="512">
-          <caret line="146" selection-start-line="146" selection-end-line="146" />
+          <caret line="212" selection-start-line="212" selection-end-line="212" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/matrixlib/defmatrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="219" selection-start-line="219" selection-end-line="219" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/lib/function_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="4693" selection-start-line="4693" selection-end-line="4693" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/core/fromnumeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/VirtDiffTools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="87" selection-start-line="87" selection-end-line="87" />
+        <state relative-caret-position="51">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
           <folding>
-            <element signature="e#497#515#0" expanded="true" />
+            <element signature="n#!!doc" />
+            <element signature="e#527#627#0" />
+            <element signature="e#1255#1347#0" />
+            <element signature="e#1835#1927#0" />
+            <element signature="e#1527#1544#0" />
+            <element signature="e#1782#2650#0" />
+            <element signature="e#949#1070#0" />
+            <element signature="e#2201#2650#0" />
+            <element signature="e#2332#2424#0" />
+            <element signature="e#2646#2663#0" />
+            <element signature="e#4145#4237#0" />
+            <element signature="e#4901#4915#0" />
+            <element signature="e#5088#7699#0" />
+            <element signature="e#5629#5654#0" />
+            <element signature="e#3196#3412#0" />
+            <element signature="e#5995#6862#0" />
+            <element signature="e#5995#6087#0" />
+            <element signature="e#4070#4236#0" />
+            <element signature="e#6918#7699#0" />
+            <element signature="e#6918#7010#0" />
+            <element signature="e#4313#4328#0" />
+            <element signature="e#7847#8545#0" />
+            <element signature="e#6190#6379#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
+        <state relative-caret-position="614">
+          <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#681#756#0" />
+            <element signature="e#1934#6776#0" />
+            <element signature="e#1964#2060#0" />
+            <element signature="e#5551#5674#0" />
+            <element signature="e#6042#6361#0" />
+            <element signature="e#5441#5609#0" />
+            <element signature="e#7472#8498#0" />
+            <element signature="e#7440#7536#0" />
+            <element signature="e#8359#8455#0" />
+            <element signature="e#3630#3709#0" />
+          </folding>
         </state>
       </provider>
     </entry>
