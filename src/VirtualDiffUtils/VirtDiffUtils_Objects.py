@@ -1,6 +1,6 @@
 # **************************************************************************************************
-# Name:    VirtDiffTools.py
-# Purpose: Module to provides classes and tools for virtual diffraction
+# Name:    VirtDiffUtils_Objects.py
+# Purpose: Module to provides classes for virtual diffraction
 # Input:   none
 # Output:  Module class definitions for virtual diffraction
 # Notes:   none
@@ -60,14 +60,16 @@ class LabSource:
 class Detector:
     # class variables
     distance = None    # Distance from detector to sample (mm)
-    width = None       # Width of detector (pixel*e-4)
-    height = None      # Height of detector (pixel*e-4)
+    width = None       # Width of detector (pixel)
+    height = None      # Height of detector (pixel)
+    pixelSize = None   # Side length of the pizel (mm)
 
     # Constructor
-    def __init__(self, dist_In, width_In, height_In):
+    def __init__(self, dist_In, width_In, height_In, pixelSize_In):
         self.distance = dist_In
         self.width = width_In
         self.height = height_In
+        self.pixelSize = pixelSize_In
 
     # Other Functions
     def dist_2_meters(self):
