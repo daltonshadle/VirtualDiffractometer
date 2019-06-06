@@ -1,5 +1,5 @@
 # **************************************************************************************************
-# Name:    VirtualDiffractometer.py
+# Name:    VirtualDiffractometer.py.py
 # Purpose: Produces synthetic diffraction patterns and tiff files
 # Input:   Listed below under "Variable Definitions" section
 # Output:  Diffraction image tiff file
@@ -202,7 +202,8 @@ def display_detector_intercept(detector, zeta):
 # ************************************* Main Function Definition ***********************************
 def main():
     omega_tuple = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
-    [two_theta, eta, k_out_lab, omega] = virtual_diffractometer(LabSource_1, Sample_1.grains[0], hkl_list, omega_tuple)
+    [two_theta, eta, k_out_lab, omega] = virtual_diffractometer(LabSource_1, Sample_1.grains[0],
+                                                                hkl_list, omega_tuple)
     zeta = detector_intercept(Detector_1, k_out_lab)
     display_detector_intercept(Detector_1, zeta)
     return 0

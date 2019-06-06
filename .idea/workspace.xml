@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36565a83-f9e2-4e2d-abc2-961cfd862929" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/VirtDiffTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtDiffTools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtualDiffractometer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtualDiffractometer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,10 +48,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer">
+        <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="614">
-              <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+            <state relative-caret-position="344">
+              <caret line="205" column="64" selection-start-line="205" selection-start-column="64" selection-end-line="205" selection-end-column="64" />
               <folding>
                 <element signature="n#!!doc" />
                 <element signature="e#681#756#0" />
@@ -62,8 +62,8 @@
                 <element signature="e#5441#5609#0" />
                 <element signature="e#7472#8498#0" />
                 <element signature="e#7440#7536#0" />
+                <element signature="e#8365#9320#0" />
                 <element signature="e#8359#8455#0" />
-                <element signature="e#3630#3709#0" />
               </folding>
             </state>
           </provider>
@@ -95,12 +95,13 @@
         <option value="$PROJECT_DIR$/src/PhysicsConstants.py" />
         <option value="$PROJECT_DIR$/src/VirtDiffTools.py" />
         <option value="$PROJECT_DIR$/src/VirtualDiffractometer" />
+        <option value="$PROJECT_DIR$/src/VirtualDiffractometer.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1099" />
-    <option name="y" value="-1157" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -156,7 +157,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/VirtualDiffractometer" />
+      <option name="SCRIPT_NAME" value="C:\Git Repositories\VirtualDiffractometer\src\VirtualDiffractometer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -185,15 +186,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1088" y="-1153" width="1096" height="1896" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18809074" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14806548" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.40272263" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3289689" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30278233" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -269,10 +270,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer">
+    <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="614">
-          <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+        <state relative-caret-position="344">
+          <caret line="205" column="64" selection-start-line="205" selection-start-column="64" selection-end-line="205" selection-end-column="64" />
           <folding>
             <element signature="n#!!doc" />
             <element signature="e#681#756#0" />
@@ -283,8 +284,8 @@
             <element signature="e#5441#5609#0" />
             <element signature="e#7472#8498#0" />
             <element signature="e#7440#7536#0" />
+            <element signature="e#8365#9320#0" />
             <element signature="e#8359#8455#0" />
-            <element signature="e#3630#3709#0" />
           </folding>
         </state>
       </provider>
