@@ -15,21 +15,21 @@ import scipy.constants as sciconst
 
 
 # *************************************** Function Definitions *************************************
-def rotating_diffraction_experiment(labsource, grain, hkl_list, omegabounds):
+def single_crystal_rotating_diffraction_experiment(labsource, grain, hkl_list, omegabounds):
     # **********************************************************************************************
-    # Name:    rotating_diffraction_experiment
-    # Purpose: function that simulates a rotating virtual diffraction experiment on a single sample
+    # Name:    single_crystal_rotating_diffraction_experiment
+    # Purpose: function that simulates a rotating virtual diffraction experiment on a single crystal
     # Input:   labsource (object) - contains energy and incoming x-ray direction
     #          grain (object) - contains grain information
-    #          hkl_list (list) - contains all hkl planes to interrogate for a diffraction event
+    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
     #          omegabounds (tuple) - contains omega rotation bounds in tuple [low, high, stepSize]
     #                                in degrees
     # Output:  Function outputs a tuple in the form [two_theta, eta, k_out_lab, total_omega]
-    #          two_theta (n x 1 matrix) - matrix of two theta angles for n diffraction events
+    #          two_theta (n x 1 matrix) - matrix of two_theta angles for n diffraction events
     #          eta (n x 1 matrix) - matrix of eta angles for n events
     #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events (in lab
     #                                     coord system)
-    #          total_omega (n x 1 matrix) - omega values for n events
+    #          total_omega (n x 1 matrix) - omega values for n diffraction events
     # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell and omega
     #          bounds)
     # **********************************************************************************************
@@ -97,7 +97,7 @@ def rotating_diffraction_experiment(labsource, grain, hkl_list, omegabounds):
 
     for y in range(0, len(total_omega)):
         rotmat_L2C = np.matrix([[cos_omega[y],  0, sin_omega[y]],
-                                [0,            1,           0],
+                                [0,             1,           0],
                                 [-sin_omega[y], 0, cos_omega[y]]])
 
         temp_g_lab = rotmat_L2C * g_sample[:, y]
@@ -131,22 +131,89 @@ def rotating_diffraction_experiment(labsource, grain, hkl_list, omegabounds):
     return [two_theta, eta, k_out_lab, total_omega]
 
 
-def find_detector_intercept(detector, k_out_lab, p_lab):
+def multi_crystal_rotating_diffraction_experiment(labsource, crystal_list, hkl_list, omegabounds):
     # **********************************************************************************************
-    # Name:    find_detector_intercept
-    # Purpose: function that calculates detector intercepts from a virtual diffraction experiment
+    # Name:    multi_crystal_rotating_diffraction_experiment
+    # Purpose: function that simulates a rotating virtual diffraction experiment on a multiple
+    #          crystals
+    # Input:   labsource (object) - contains energy and incoming x-ray direction
+    #          crystal_list (m x 1) - list that contains m crystal objects for experiment
+    #          hkl_list (n x 3) - contains n hkl plane vectors to interrogate for diffraction event
+    #          omegabounds (tuple) - contains omega rotation bounds in tuple [low, high, stepSize]
+    #                                in degrees
+    # Output:  multi_crystal_list (m x 1) - Function outputs list of m tuples in the form
+    #                                       [two_theta, eta, k_out_lab, total_omega]. One tuple for
+    #                                       each crystal in crystal_list.
+    # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell and omega
+    #          bounds)
+    # **********************************************************************************************
+
+    multi_crystal_list = []
+
+    for crystal in crystal_list:
+        temp_tuple = single_crystal_rotating_diffraction_experiment(labsource, crystal, hkl_list,
+                                                                    omegabounds)
+        multi_crystal_list.append(temp_tuple)
+
+    return multi_crystal_list
+
+
+def compute_crystal_position_lab(p_sample, omega):
+    # **********************************************************************************************
+    # Name:    compute_crystal_position_lab
+    # Purpose: function calculates crystal position vectors in lab during a rotating diffraction exp
+    # Input:   p_sample (3 x 1 vector) - crystal position vector in the sample coord system
+    #          omega (n x 1 vector) - omega values for n diffraction events
+    # Output:  p_lab (3 x n matrix) - crystal position vectors in lab coord system for n diffraction
+    #                                 events
+    # Notes:   none
+    # **********************************************************************************************
+
+    # generate a n x 1 vector containing only the value one
+    one_vector = np.ones(np.shape(omega)[0])
+
+    # calculate n x 1 vectors that hold p_sample values
+    p_sam_x = p_sample[0] * one_vector
+    p_sam_y = p_sample[1] * one_vector
+    p_sam_z = p_sample[2] * one_vector
+
+    # calculate sin and cos for omegas
+    sin = np.sin(np.deg2rad(omega))
+    cos = np.cos(np.deg2rad(omega))
+
+    # calculate components for p_lab
+    p_lab_x = p_sam_x * cos + p_sam_z * sin
+    p_lab_y = p_sam_y
+    p_lab_z = -1 * p_sam_x * sin + p_sam_z * cos
+
+    # combine components for p_lab
+    p_lab = np.column_stack((p_lab_x, p_lab_y, p_lab_z))
+    p_lab = np.transpose(p_lab)
+
+    return p_lab
+
+
+def single_crystal_find_detector_intercept(detector, p_sample, k_out_lab, omega):
+    # **********************************************************************************************
+    # Name:    single_crystal_find_detector_intercept
+    # Purpose: function that calculates detector intercepts from a single crystal virtual
+    #          diffraction experiment
     # Input:   detector (object) - holds all detector info
-    #          k_out_lab (n x 3 matrix) - holds all the outgoing wave vectors for n events (in lab
-    #                                     coord system)
-    #          p_lab (n x 3 matrix) - holds all crystal position vectors for n events (in lab coord
-    #                                 system)
+    #          k_out_lab (n x 3 matrix) - holds outgoing wave vectors for n events in lab
+    #                                     coord system
+    #          p_sample (3 x 1 vector) - holds crystal position vector for n events in sample coord
+    #                                    system
+    #          omega (n x 1 matrix) - holds omega values for n diffraction events
     # Output:  Function outputs a tuple in the form [zeta, zeta_pix]
-    #          zeta (n x 3 matrix) - holds the position vectors (x,y,z) of intercepts where n
+    #          zeta (3 x n matrix) - holds the position vectors (x,y,z) of intercepts where n
     #                                events occurred
-    #          zeta_pix (n x 2 matrix) - holds the position vectors (x,y) of pixels on the detector
+    #          zeta_pix (2 x n matrix) - holds the position vectors (x,y) of pixels on the detector
     #                                    where n events occurred
     # Notes:   none
     # **********************************************************************************************
+
+    # Get p_lab with call to compute_crystal_position_lab (3 x n matrix)
+    p_lab = compute_crystal_position_lab(p_sample, omega)
 
     # Calculate magnitude and unit vectors for outgoing wavelength
     mag_k_out_lab = np.linalg.norm(k_out_lab, axis=0)
@@ -160,10 +227,50 @@ def find_detector_intercept(detector, k_out_lab, p_lab):
     zeta = p_lab + np.multiply(np.tile(z, (3, 1)), unit_k_out_lab)
 
     # Calculate intercept pixels
-    zeta_pix = np.divide(zeta, detector.pixelSize)
+    zeta_pix = zeta * detector.pixel_density_mm
     zeta_pix = zeta_pix[0:2, :]
 
     return [zeta, zeta_pix]
+
+
+def multi_crystal_find_detector_intercept(detector, crystal_list, k_out_lab_list, omega_list):
+    # **********************************************************************************************
+    # Name:    multi_crystal_find_detector_intercept
+    # Purpose: function that calculates detector intercepts from a multi crystal virtual
+    #          diffraction experiment
+    # Input:   detector (object) - holds detector info
+    #          crystal_list (m x 1 list) - holds m crystal objects
+    #          k_out_lab_list (m x n x 3 matrix) -  holds m crystals outgoing wave vectors in the
+    #                                               lab coord system for n diffraction events
+    #          omega_list (m x n x 1 matrix) -  holds m crystals omega values for n diffraction
+    #                                           events
+    # Output:  Function outputs a tuple in the form [zeta, zeta_pix]
+    #          zeta (3 x p matrix) - holds the position vectors (x,y,z) of intercepts where p
+    #                                events occurred, p = m * n
+    #          zeta_pix (2 x p matrix) - holds the position vectors (x,y) of pixels on the detector
+    #                                    where p events occurred, p = m * n
+    #          flat_omega_list (p x 1 matrix) = holds omega values for p events, p = m * n
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize zeta and zeta_pix
+    zeta = np.empty([3, 0])
+    zeta_pix = np.empty([2, 0])
+    new_omega_list = np.empty([0, ])
+
+    # iterate over each crystal and call single_crystal_find_detector_intercept, add to total lists
+    for i in range(len(crystal_list)):
+        k_out_lab = k_out_lab_list[i]
+        p_sample = crystal_list[i].grainCOM
+        omega = omega_list[i]
+        [temp_zeta, temp_zeta_pix] = single_crystal_find_detector_intercept(detector, p_sample,
+                                                                            k_out_lab, omega)
+        # add to lists
+        zeta = np.hstack((zeta, temp_zeta))
+        zeta_pix = np.hstack((zeta_pix, temp_zeta_pix))
+        new_omega_list = np.hstack((new_omega_list, omega))
+
+    return [zeta, zeta_pix, new_omega_list]
 
 
 def display_detector_intercept(detector, zeta_pix, omega, omega_bounds):

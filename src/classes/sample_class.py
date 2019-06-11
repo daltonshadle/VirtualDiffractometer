@@ -72,7 +72,7 @@ class Grain:
     # class variables
     unitCell = None                # holds all info on crystal unit cell
     grainDimensions = np.zeros(3)  # grain dimensions (x,y,z)
-    grainCOMs = np.zeros(3)        # grain centroids/ center of mass (x,y,z)
+    grainCOM = np.zeros(3)         # grain centroids/ center of mass (x,y,z) in sample coord system
     orientation = np.zeros(4)      # orientation of the grain, which provides crystal to sample
                                    # transformation (quaternions)
     intensity = None               # Set intensities for all spots of each grain (nice way to
@@ -82,7 +82,7 @@ class Grain:
     def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_in, intensity_in):
         self.unitCell = unit_cell_in
         self.grainDimensions = grain_dim_in
-        self.grainCOMs = grain_com_in
+        self.grainCOM = grain_com_in
         self.orientation = orient_in
         self.intensity = intensity_in
 
@@ -118,10 +118,10 @@ class Grain:
         # Notes:   none
         # ******************************************************************************************
 
-        self.orientation[0] = np.sqrt(1 + rot_mat[0][0] + rot_mat[1][1] + rot_mat[2][2]) / 2
-        self.orientation[1] = (rot_mat[2][1] - rot_mat[1][2]) / (4 * self.orientation[0])
-        self.orientation[2] = (rot_mat[0][2] - rot_mat[2][0]) / (4 * self.orientation[0])
-        self.orientation[3] = (rot_mat[1][0] - rot_mat[0][1]) / (4 * self.orientation[0])
+        self.orientation[0] = np.sqrt(1 + rot_mat[0, 0] + rot_mat[1, 1] + rot_mat[2, 2]) / 2
+        self.orientation[1] = (rot_mat[2, 1] - rot_mat[1, 2]) / (4 * self.orientation[0])
+        self.orientation[2] = (rot_mat[0, 2] - rot_mat[2, 0]) / (4 * self.orientation[0])
+        self.orientation[3] = (rot_mat[1, 0] - rot_mat[0, 1]) / (4 * self.orientation[0])
 
 
 # Class: Sample

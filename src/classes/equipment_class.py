@@ -58,17 +58,17 @@ class LabSource:
 # Note: none
 class Detector:
     # class variables
-    distance = None    # Distance from detector to sample (mm)
-    width = None       # Width of detector (pixel)
-    height = None      # Height of detector (pixel)
-    pixelSize = None   # Side length of the pizel (mm)
+    distance = None          # Distance from detector to sample (mm)
+    width = None             # Width of detector (pixel)
+    height = None            # Height of detector (pixel)
+    pixel_density_mm = None  # The amount of pixels per mm (pixel/mm)
 
     # Constructor
-    def __init__(self, dist_in, width_in, height_in, pixelSize_in):
+    def __init__(self, dist_in, width_in, height_in, pixel_density_mm_in):
         self.distance = dist_in
         self.width = width_in
         self.height = height_in
-        self.pixelSize = pixelSize_in
+        self.pixel_density_mm = pixel_density_mm_in
 
     # Other Functions
     def dist_2_meters(self):
