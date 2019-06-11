@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36565a83-f9e2-4e2d-abc2-961cfd862929" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/classes/equipment_class.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/classes/sample_class.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/VirtDiffTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Objects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VirtualDiffractometer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/sample_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Objects.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VirtualDiffractometer.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/virt_diff_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,35 +18,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Functions.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/virt_diff_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1666">
-              <caret line="98" column="50" selection-start-line="98" selection-start-column="50" selection-end-line="98" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Objects.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="74" column="28" selection-start-line="74" selection-start-column="28" selection-end-line="74" selection-end-column="28" />
+            <state relative-caret-position="663">
+              <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
               <folding>
-                <element signature="e#789#2483#0" />
+                <element signature="e#507#562#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="140" column="32" lean-forward="true" selection-start-line="140" selection-start-column="32" selection-end-line="140" selection-end-column="32" />
+            <state relative-caret-position="153">
+              <caret line="130" column="51" selection-start-line="130" selection-start-column="51" selection-end-line="130" selection-end-column="51" />
               <folding>
-                <element signature="e#710#762#0" expanded="true" />
-                <element signature="e#8520#9319#0" />
+                <element signature="n#!!doc" />
+                <element signature="e#531#586#0" expanded="true" />
+                <element signature="e#881#6606#0" />
+                <element signature="e#881#977#0" />
+                <element signature="e#4864#4990#0" />
+                <element signature="e#5393#5557#0" />
+                <element signature="e#8426#9558#0" />
               </folding>
             </state>
           </provider>
@@ -61,10 +60,14 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>obj</find>
+      <find>_In</find>
+      <find>cosOmega</find>
     </findStrings>
     <replaceStrings>
       <replace>self</replace>
       <replace>zero_solution</replace>
+      <replace>_in</replace>
+      <replace>cos_omega</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -80,13 +83,18 @@
         <option value="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Objects.py" />
         <option value="$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Functions.py" />
         <option value="$PROJECT_DIR$/src/VirtualDiffractometer.py" />
+        <option value="$PROJECT_DIR$/src/classes/equipment_class.py" />
+        <option value="$PROJECT_DIR$/src/classes/sample_class.py" />
+        <option value="$PROJECT_DIR$/src/utils/sample_functions.py" />
+        <option value="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" />
+        <option value="$PROJECT_DIR$/test/virt_diff_test.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1658" />
-    <option name="y" value="-1157" />
-    <option name="width" value="1366" />
+    <option name="x" value="-1300" />
+    <option name="y" value="-1162" />
+    <option name="width" value="1080" />
     <option name="height" value="697" />
   </component>
   <component name="ProjectView">
@@ -110,7 +118,13 @@
               <item name="VirtualDiffractometer" type="b2602c69:ProjectViewProjectNode" />
               <item name="VirtualDiffractometer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="VirtualDiffUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="VirtualDiffractometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="VirtualDiffractometer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -124,6 +138,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Git Repositories\VirtualDiffractometer\test" />
+      <recent name="C:\Git Repositories\VirtualDiffractometer\src\classes" />
       <recent name="C:\Git Repositories\VirtualDiffractometer\src\VirtualDiffUtils" />
     </key>
   </component>
@@ -140,7 +156,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="VirtualDiffractometer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="virt_diff_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="VirtualDiffractometer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,7 +168,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Git Repositories\VirtualDiffractometer\src\VirtualDiffractometer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/virt_diff_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -163,7 +179,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.VirtualDiffractometer" />
+        <item itemvalue="Python.virt_diff_test" />
       </list>
     </recent_temporary>
   </component>
@@ -188,8 +204,8 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3289689" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.47419173" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32841748" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.1968236" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -233,30 +249,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Functions.py">
+    <entry file="file://$PROJECT_DIR$/src/classes/sample_class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1666">
-          <caret line="98" column="50" selection-start-line="98" selection-start-column="50" selection-end-line="98" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/VirtualDiffUtils/VirtDiffUtils_Objects.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="74" column="28" selection-start-line="74" selection-start-column="28" selection-end-line="74" selection-end-column="28" />
+        <state relative-caret-position="374">
+          <caret line="68" column="28" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="28" />
           <folding>
-            <element signature="e#789#2483#0" />
+            <element signature="e#733#2859#0" />
+            <element signature="e#1181#2071#0" />
+            <element signature="e#2127#2859#0" />
+            <element signature="e#2127#2219#0" />
+            <element signature="e#3049#5688#0" />
+            <element signature="e#3570#3595#0" />
+            <element signature="e#3711#3893#0" />
+            <element signature="e#3952#4817#0" />
+            <element signature="e#3952#4044#0" />
+            <element signature="e#4583#4792#0" />
+            <element signature="e#4863#5688#0" />
+            <element signature="e#4863#4955#0" />
+            <element signature="e#5786#6607#0" />
+            <element signature="e#6418#6607#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VirtualDiffractometer.py">
+    <entry file="file://$PROJECT_DIR$/src/utils/sample_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="140" column="32" lean-forward="true" selection-start-line="140" selection-start-column="32" selection-end-line="140" selection-end-column="32" />
+        <state relative-caret-position="185">
+          <caret line="118" column="22" lean-forward="true" selection-start-line="118" selection-start-column="22" selection-end-line="118" selection-end-column="22" />
           <folding>
-            <element signature="e#710#762#0" expanded="true" />
-            <element signature="e#8520#9319#0" />
+            <element signature="e#529#547#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/classes/equipment_class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+          <folding>
+            <element signature="e#494#512#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="130" column="51" selection-start-line="130" selection-start-column="51" selection-end-line="130" selection-end-column="51" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#531#586#0" expanded="true" />
+            <element signature="e#881#6606#0" />
+            <element signature="e#881#977#0" />
+            <element signature="e#4864#4990#0" />
+            <element signature="e#5393#5557#0" />
+            <element signature="e#8426#9558#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/virt_diff_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
+          <folding>
+            <element signature="e#507#562#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1,14 +1,15 @@
 # **************************************************************************************************
-# Name:    VirtDiffUtils_Functions.py
-# Purpose: Module to provides functions for virtual diffraction
+# Name:    sample_functions.py
+# Purpose: Module to provides sample related functions for virtual diffraction
 # Input:   none
-# Output:  Module function definitions for virtual diffraction
+# Output:  Module for sample related function definitions for virtual diffraction
 # Notes:   none
 # **************************************************************************************************
 
 
 # ********************************************* Imports ********************************************
 import numpy as np
+import csv
 
 
 # *************************************** Function Definitions *************************************
@@ -98,4 +99,30 @@ def gen_hkl_fam_from_list(hkl_list, cubic=False, hexagonal=False):
 
     hkl_fam_list = np.unique(hkl_fam_list, axis=0)
     return hkl_fam_list
+
+
+def read_hkl_from_csv(file_path):
+    # **********************************************************************************************
+    # Name:    read_hkl_from_csv
+    # Purpose: function that reads the hkl vector list from csv and returns as list
+    # Input:   file_path (string) - path of csv file to read from, csv must store hkl as (n x 3)
+    # Output:  hkl_list (n x 3 matrix) - matrix that holds all the hkl vectors from csv file
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize return list
+    hkl_list = np.empty((0, 3))
+
+    # open csv storing hkl vectors
+    with open(file_path) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+
+        # iterate over all rows in csv and add to hkl_list
+        for row in csv_reader:
+            hkl_vec = np.array([float(row[0]), float(row[1]), float(row[2])])
+            hkl_list = np.vstack((hkl_list, hkl_vec))
+            line_count += 1
+        print(f'Processed {line_count} hkl vectors.')
+    return hkl_list
 

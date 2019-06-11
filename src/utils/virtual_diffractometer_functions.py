@@ -1,53 +1,23 @@
 # **************************************************************************************************
-# Name:    VirtualDiffractometer.py.py
-# Purpose: Produces synthetic diffraction patterns and tiff files
-# Input:   Listed below under "Variable Definitions" section
-# Output:  Diffraction image tiff file
-# Notes:   - Ideal detector parameters only (i.e., only energy and
-#            sample-to-detector distance--no tilt, etc. )
-#          - Doesn't consider intensity parameters (e.g., structure factor)
+# Name:    virtual_diffractometer_functions.py
+# Purpose: Declaration and implementation of virtual diffractometer functions
+# Input:   none
+# Output:  Function definitions for virtual diffractometer experiment
+# Notes:   none
 # **************************************************************************************************
 
 # ********************************************* Imports ********************************************
-from VirtualDiffUtils.VirtDiffUtils_Objects import *
-from VirtualDiffUtils.VirtDiffUtils_Functions import *
-import numpy.matlib as matlib
-
-
-# *************************************** Variable Definitions *************************************
-
-# Detector_1 parameters (distance, energy, width, height)(mm, keV, pixel*e-4, pixel*e-4)
-detector_size = 500
-Detector_1 = Detector(1000, detector_size, detector_size, 1)
-
-# LabSource_1 parameters (energy, incomingXray) (keV, unitVector)
-LabSource_1 = LabSource(55.618, LabSource.lab_z)
-
-# unitCell_1 lattice parameters (a,b,c,alpha,beta,gamma) (Angstroms, degrees)
-unitCell_1 = UnitCell(np.array([2, 2, 2, 90, 90, 90]))
-
-# Grain_1 parameters (unitCell, dimension, COM, orientation, intensity)
-Grain_1 = Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0.0, 0.5, 0.0]),
-                np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3]), 100)
-
-# Sample_1 parameters (grains in a list, omegaLow, omegaHigh, omegaStepSize) (degrees)
-Sample_1 = Sample(np.array([Grain_1]), 0, 180, 1)
-
-# hkl_list initialization
-hkl_list = np.matrix([[1, 0, 0],
-                      [0, 1, 0],
-                      [0, 0, 1],
-                      [1, 1, 1],
-                      [1, 1, 2],
-                      [1, 1, 3],
-                      [1, 1, 4]])
-hkl_list = np.matrix([[3, 0, 0]])
+from classes.equipment_class import LabSource, Detector
+from classes.sample_class import Grain, UnitCell, Sample
+import numpy as np
+import matplotlib.pyplot as plot
+import scipy.constants as sciconst
 
 
 # *************************************** Function Definitions *************************************
-def virtual_diffractometer(labsource, grain, hkl_list, omegabounds):
+def rotating_diffraction_experiment(labsource, grain, hkl_list, omegabounds):
     # **********************************************************************************************
-    # Name:    virtual_diffractometer
+    # Name:    rotating_diffraction_experiment
     # Purpose: function that simulates a rotating virtual diffraction experiment on a single sample
     # Input:   labsource (object) - contains energy and incoming x-ray direction
     #          grain (object) - contains grain information
@@ -73,7 +43,7 @@ def virtual_diffractometer(labsource, grain, hkl_list, omegabounds):
     g_sample_y = np.transpose(g_sample[1, :])
     g_sample_z = np.transpose(g_sample[2, :])
 
-    # set up quadratic formula for solving omega values
+    # set up quadratic formula for solving omega values: qf = (-b +- sqrt(b^2 - 4*a*c)) / (2*a)
     Y = ((np.power(g_sample_x, 2) + np.power(g_sample_y, 2) + np.power(g_sample_z, 2))
          / (2 * np.linalg.norm(labsource.k_in_lab)))
     a = np.power(g_sample_x, 2) + np.power(g_sample_z, 2)
@@ -161,10 +131,10 @@ def virtual_diffractometer(labsource, grain, hkl_list, omegabounds):
     return [two_theta, eta, k_out_lab, total_omega]
 
 
-def detector_intercept(detector, k_out_lab, p_lab):
+def find_detector_intercept(detector, k_out_lab, p_lab):
     # **********************************************************************************************
-    # Name:    detector_intercept
-    # Purpose: function that simulates a rotating virtual diffraction experiment on a single sample
+    # Name:    find_detector_intercept
+    # Purpose: function that calculates detector intercepts from a virtual diffraction experiment
     # Input:   detector (object) - holds all detector info
     #          k_out_lab (n x 3 matrix) - holds all the outgoing wave vectors for n events (in lab
     #                                     coord system)
@@ -196,49 +166,45 @@ def detector_intercept(detector, k_out_lab, p_lab):
     return [zeta, zeta_pix]
 
 
-def display_detector_intercept(detector, zeta_pix):
+def display_detector_intercept(detector, zeta_pix, omega, omega_bounds):
     # **********************************************************************************************
     # Name:    detector_intercept
-    # Purpose: function that simulates a rotating virtual diffraction experiment on a single sample
+    # Purpose: function that displays virtual diffraction image
     # Input:   detector (object) - holds all detector info
     #          zeta_pix (n x 2 matrix) - holds the position vectors (x,y) of pixels on the detector
     #                                    where n events occurred
+    #          omega (n x 1) matrix - holds the omega values for n diffraction events
+    #          omega_bounds (tuple) - holds bounds for omega and thresholds what events to display,
+    #                                 takes the form [omega_low, omega_high]
     # Output:  Scatter plot image of the diffraction events
     # Notes:   none
     # **********************************************************************************************
 
+    # initializing x and y to empty matrix
+    x = np.empty((0, 1))
+    y = np.empty((0, 1))
+
     # grabbing all x and y values
-    x = zeta_pix[0, :].tolist()
-    y = zeta_pix[1, :].tolist()
+    all_x = zeta_pix[0, :].tolist()
+    all_y = zeta_pix[1, :].tolist()
+
+    # add events for omega values inside the bounds
+    for i in range(np.shape(omega)[0]):
+        if omega_bounds[0] < omega[i] < omega_bounds[1]:
+            x = np.append(x, all_x[0][i])
+            y = np.append(y, all_y[0][i])
 
     # adding a point for the transmitted incoming wavelength at the origin
     x = np.append(x, [0])
     y = np.append(y, [0])
 
     # plot using a scatter
-    plot.scatter(x, y, marker=".", s=1)
+    fig, ax = plot.subplots(nrows=1, ncols=1)
+    plot.scatter(x, y, marker=".", color="white", s=3)
+    ax.set_facecolor('xkcd:black')
     plot.xlim(-detector.width / 2, detector.width / 2)
     plot.ylim(-detector.height / 2, detector.height / 2)
     plot.show()
 
     return 0
 
-
-# ************************************* Main Function Definition ***********************************
-def main():
-    hkl_fam_list = gen_hkl_fam_from_list(hkl_list, cubic=True)
-
-    omega_tuple = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
-    [two_theta, eta, k_out_lab, omega] = virtual_diffractometer(LabSource_1, Sample_1.grains[0],
-                                                                hkl_fam_list, omega_tuple)
-
-    [zeta, zeta_pix] = detector_intercept(Detector_1, k_out_lab,
-                              np.transpose(np.array([[0, 0, 0], ] * np.shape(k_out_lab)[1])))
-
-    display_detector_intercept(Detector_1, zeta_pix)
-
-    return 0
-
-
-# ************************************* Main Function Execution ************************************
-main()
