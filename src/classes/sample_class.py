@@ -9,6 +9,7 @@
 
 # ********************************************* Imports ********************************************
 import numpy as np
+import scipy.constants as sciconst
 
 
 # ***************************************** Class Definitions **************************************
@@ -53,15 +54,15 @@ class UnitCell:
         # ******************************************************************************************
         # Name:    get_reciprocal_lattice_vectors
         # Purpose: function that returns the reciprocal lattice vectors as the columns of a 3x3
-        #          matrix
+        #          matrix (2pi convention)
         # Input:   none
         # Output:  recip_mat (3x3 matrix) - columns of matrix are reciprocal lattice vectors
         # Notes:   none
         # ******************************************************************************************
 
-        b1 = (2 / self.volume) * np.cross(self.a2, self.a3)
-        b2 = (2 / self.volume) * np.cross(self.a3, self.a1)
-        b3 = (2 / self.volume) * np.cross(self.a1, self.a2)
+        b1 = (2 * sciconst.pi / self.volume) * np.cross(self.a2, self.a3)
+        b2 = (2 * sciconst.pi / self.volume) * np.cross(self.a3, self.a1)
+        b3 = (2 * sciconst.pi / self.volume) * np.cross(self.a1, self.a2)
         return np.column_stack((b1, b2, b3))
 
 
@@ -74,7 +75,7 @@ class Grain:
     grainDimensions = np.zeros(3)  # grain dimensions (x,y,z)
     grainCOM = np.zeros(3)         # grain centroids/ center of mass (x,y,z) in sample coord system
     orientation = np.zeros(4)      # orientation of the grain, which provides crystal to sample
-                                   # transformation (quaternions)
+                                   # transformation (quaternions) (w, x, y, z)
     intensity = None               # Set intensities for all spots of each grain (nice way to
                                    # differentiate by sight)
 
