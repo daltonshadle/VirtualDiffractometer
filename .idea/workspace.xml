@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36565a83-f9e2-4e2d-abc2-961cfd862929" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/classes/sample_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/classes/sample_class.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/virt_diff_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/virt_diff_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/virt_diff_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,10 +16,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/virt_diff_test.py">
+        <entry file="file://$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="706">
-              <caret line="63" column="70" selection-start-line="63" selection-start-column="70" selection-end-line="63" selection-end-column="70" />
+            <state relative-caret-position="34">
+              <caret line="2" column="43" selection-start-line="2" selection-start-column="43" selection-end-line="2" selection-end-column="43" />
               <folding>
                 <element signature="e#507#562#0" expanded="true" />
               </folding>
@@ -26,10 +27,19 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/classes/sample_class.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
+            <state relative-caret-position="1292">
               <caret line="77" column="78" selection-start-line="77" selection-start-column="78" selection-end-line="77" selection-end-column="78" />
               <folding>
                 <element signature="e#500#518#0" expanded="true" />
@@ -38,28 +48,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1012">
-              <caret line="341" column="89" selection-start-line="341" selection-start-column="89" selection-end-line="341" selection-end-column="89" />
+            <state relative-caret-position="238">
+              <caret line="128" column="20" lean-forward="true" selection-start-line="128" selection-start-column="20" selection-end-line="128" selection-end-column="20" />
               <folding>
                 <element signature="n#!!doc" />
-                <element signature="e#947#5958#0" />
-                <element signature="e#2743#2837#0" />
-                <element signature="e#3797#3884#0" />
-                <element signature="e#4665#4950#0" />
-                <element signature="e#4672#4826#0" />
-                <element signature="e#5166#5196#0" />
-                <element signature="e#6058#11874#0" />
-                <element signature="e#10097#10223#0" />
-                <element signature="e#10603#10895#0" />
-                <element signature="e#10626#10791#0" />
-                <element signature="e#11127#11156#0" />
-                <element signature="e#14993#16923#0" />
-                <element signature="e#17025#19184#0" />
-                <element signature="e#19162#21057#0" />
-                <element signature="e#21104#21317#0" />
+                <element signature="e#932#6010#0" />
               </folding>
             </state>
           </provider>
@@ -103,8 +99,10 @@
         <option value="$PROJECT_DIR$/src/utils/sample_functions.py" />
         <option value="$PROJECT_DIR$/src/classes/equipment_class.py" />
         <option value="$PROJECT_DIR$/src/classes/sample_class.py" />
-        <option value="$PROJECT_DIR$/test/virt_diff_test.py" />
         <option value="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" />
+        <option value="$PROJECT_DIR$/test/virt_diff_test.py" />
+        <option value="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" />
+        <option value="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" />
       </list>
     </option>
   </component>
@@ -119,6 +117,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -143,11 +142,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="VirtualDiffractometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="VirtualDiffractometer" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -155,6 +158,9 @@
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Git Repositories\VirtualDiffractometer\test" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Git Repositories\VirtualDiffractometer\test" />
       <recent name="C:\Git Repositories\VirtualDiffractometer\src\classes" />
@@ -173,8 +179,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="virt_diff_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.multi_crystal_rot_virt_diff_test">
+    <configuration name="multi_crystal_rot_virt_diff_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="VirtualDiffractometer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -186,7 +192,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/virt_diff_test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -195,9 +201,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sing_crystal_rot_virt_diff_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="VirtualDiffractometer" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.multi_crystal_rot_virt_diff_test" />
+      <item itemvalue="Python.sing_crystal_rot_virt_diff_test" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.virt_diff_test" />
+        <item itemvalue="Python.sing_crystal_rot_virt_diff_test" />
+        <item itemvalue="Python.multi_crystal_rot_virt_diff_test" />
       </list>
     </recent_temporary>
   </component>
@@ -218,12 +250,12 @@
     <frame x="-1088" y="-1153" width="1096" height="1896" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19092627" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1899811" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32841748" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27339762" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.27339762" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39988655" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -293,7 +325,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/classes/sample_class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
+        <state relative-caret-position="1292">
           <caret line="77" column="78" selection-start-line="77" selection-start-column="78" selection-end-line="77" selection-end-column="78" />
           <folding>
             <element signature="e#500#518#0" expanded="true" />
@@ -301,38 +333,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/virt_diff_test.py">
+    <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="706">
-          <caret line="63" column="70" selection-start-line="63" selection-start-column="70" selection-end-line="63" selection-end-column="70" />
+        <state relative-caret-position="238">
+          <caret line="128" column="20" lean-forward="true" selection-start-line="128" selection-start-column="20" selection-end-line="128" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#932#6010#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="43" selection-start-line="2" selection-start-column="43" selection-end-line="2" selection-end-column="43" />
           <folding>
             <element signature="e#507#562#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
+    <entry file="file://$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1012">
-          <caret line="341" column="89" selection-start-line="341" selection-start-column="89" selection-end-line="341" selection-end-column="89" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#947#5958#0" />
-            <element signature="e#2743#2837#0" />
-            <element signature="e#3797#3884#0" />
-            <element signature="e#4665#4950#0" />
-            <element signature="e#4672#4826#0" />
-            <element signature="e#5166#5196#0" />
-            <element signature="e#6058#11874#0" />
-            <element signature="e#10097#10223#0" />
-            <element signature="e#10603#10895#0" />
-            <element signature="e#10626#10791#0" />
-            <element signature="e#11127#11156#0" />
-            <element signature="e#14993#16923#0" />
-            <element signature="e#17025#19184#0" />
-            <element signature="e#19162#21057#0" />
-            <element signature="e#21104#21317#0" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
         </state>
       </provider>
     </entry>

@@ -120,28 +120,19 @@ def djshadle_sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     return [two_theta, eta, k_out_lab, total_omega]
 
 
-def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
+def compute_omega_rot_diff_exp(g_sample, k_in_lab):
     # **********************************************************************************************
-    # Name:    sing_crystal_rot_diff_exp
-    # Purpose: function that simulates a rotating virtual diffraction experiment on a single crystal
-    # Input:   labsource (object) - contains energy and incoming x-ray direction
-    #          grain (object) - contains grain information
-    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
-    #          omegabounds (tuple) - contains omega rotation bounds in tuple [low, high, stepSize]
-    #                                in degrees
-    # Output:  Function outputs a tuple in the form [two_theta, eta, k_out_lab, total_omega]
-    #          two_theta (n x 1 matrix) - matrix of two_theta angles for n diffraction events
-    #          eta (n x 1 matrix) - matrix of eta angles for n events
-    #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events (in lab
-    #                                     coord system)
-    #          total_omega (n x 1 matrix) - omega values for n diffraction events
-    # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell and omega
-    #          bounds)
+    # Name:    compute_omega_rot_diff_exp
+    # Purpose: function that calculates omega values given reciprocal lattice vectors and wavelength
+    # Input:   g_sample (3 x m matrix) - contains reciprocal lattice vectors in the sample coord
+    #                                    system to compute omega values for
+    #          k_in_lab (1 x 3 vector) - vector of the incoming x-ray in the lab coord system
+    # Output:  Function outputs a tuple in the form [omega, g_sample]
+    #          omega (n x 1 matrix) - omega values for n diffraction events
+    #          g_sample (n x 3 matrix) - reciprocal lattice vectors for n diffraction events
+    # Notes:   omega and g_sample are indexed such that each row index in omega corresponds to the
+    #          same row index in g_sample (ie each omega value is pair with a g_sample vector)
     # **********************************************************************************************
-
-    # reciprocal lattice vectors (in columns of matrix) in sample coord system
-    g_sample = (grain.quat2rotmat() * grain.unitCell.get_reciprocal_lattice_vectors()
-               * np.transpose(hkl_list))
 
     # split into x, y, z in the sample coord system
     g_sample_x = np.transpose(g_sample[0, :])
@@ -150,7 +141,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
 
     # set up quadratic formula for solving omega values: qf = (-b +- sqrt(b^2 - 4*a*c)) / (2*a)
     Y = ((np.power(g_sample_x, 2) + np.power(g_sample_y, 2) + np.power(g_sample_z, 2))
-         / (2 * np.linalg.norm(labsource.k_in_lab)))
+         / (2 * np.linalg.norm(k_in_lab)))
     a = np.power(g_sample_x, 2) + np.power(g_sample_z, 2)
     b = 2 * np.multiply(Y, g_sample_x)
     c = np.power(Y, 2) - np.power(g_sample_z, 2)
@@ -162,8 +153,10 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     index2 = np.where(np.abs(rad >= precis))[0]
 
     # calculate solution of quadratic formula and find omega values (in degrees)
-    plus_solution = np.divide((-np.take(b, index2) + np.take(rad, index2)), (2 * np.take(a, index2)))
-    minus_solution = np.divide((-np.take(b, index2) - np.take(rad, index2)), (2 * np.take(a, index2)))
+    plus_solution = np.divide((-np.take(b, index2) + np.take(rad, index2)),
+                              (2 * np.take(a, index2)))
+    minus_solution = np.divide((-np.take(b, index2) - np.take(rad, index2)),
+                               (2 * np.take(a, index2)))
     zero_solution = np.divide(-np.take(b, index1), (2 * np.take(a, index1)))
 
     plus_omega = np.array(np.rad2deg(np.real(np.arcsin(plus_solution)))).flatten()
@@ -188,12 +181,41 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     total_omega = np.append(total_omega, zero_omega, axis=0)
     g_sample_temp = np.concatenate((g_sample_temp, g_sample[:, index1]), axis=1)
 
+    return [total_omega, g_sample_temp]
+
+
+def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
+    # **********************************************************************************************
+    # Name:    sing_crystal_rot_diff_exp
+    # Purpose: function that simulates a rotating virtual diffraction experiment on a single crystal
+    # Input:   labsource (object) - contains energy and incoming x-ray direction
+    #          grain (object) - contains grain information
+    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
+    #          omegabounds (tuple) - contains omega rotation bounds in tuple [low, high, stepSize]
+    #                                in degrees
+    # Output:  Function outputs a tuple in the form [two_theta, eta, k_out_lab, total_omega]
+    #          two_theta (n x 1 matrix) - matrix of two_theta angles for n diffraction events
+    #          eta (n x 1 matrix) - matrix of eta angles for n events
+    #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events (in lab
+    #                                     coord system)
+    #          total_omega (n x 1 matrix) - omega values for n diffraction events
+    # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell and omega
+    #          bounds)
+    # **********************************************************************************************
+
+    # reciprocal lattice vectors (in columns of matrix) in sample coord system
+    g_sample = (grain.quat2rotmat() * grain.unitCell.get_reciprocal_lattice_vectors()
+               * np.transpose(hkl_list))
+
+    # compute omega values for rotating diffraction experiment
+    [total_omega, g_sample] = compute_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
+
     # complete bounds control for omega bounds
     out_of_bounds_index = np.concatenate((np.where(total_omega < omegabounds[0])[0],
                                           np.where(total_omega > omegabounds[1])[0]))
 
     total_omega = np.delete(total_omega, out_of_bounds_index)
-    g_sample = np.delete(g_sample_temp, out_of_bounds_index, 1)
+    g_sample = np.delete(g_sample, out_of_bounds_index, 1)
 
     # build reciprocal lattice vector list in the lab coord system
     sin_omega = np.sin(np.deg2rad(total_omega))
@@ -214,7 +236,6 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
         k_in_mat[i, :] = k_in_mat[i, :] * labsource.k_in_lab[i]
 
     k_out_lab = k_in_mat + g_lab
-    #print(k_in_mat, "\n", g_lab)
 
     # get rid of bad solutions
     precis = 1E-10
