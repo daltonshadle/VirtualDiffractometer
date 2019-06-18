@@ -19,12 +19,12 @@ import scipy.constants as sciconst
 # Note: none
 class UnitCell:
     # class variables
-    latticeParams = np.zeros(6)  # lattice parameters in the form [a,b,c,alpha,beta,gamma]
-                                 # (Angstroms, degrees)
-    a1 = np.zeros(3)             # unit cell vector 1
-    a2 = np.zeros(3)             # unit cell vector 2
-    a3 = np.zeros(3)             # unit cell vector 3
-    volume = None                # unit cell volume
+    latticeParams = np.zeros(6)  # (6x1 matrix) - lattice parameters in the form
+                                 # [a,b,c,alpha,beta,gamma] (Angstroms, degrees)
+    a1 = np.zeros(3)             # (3x1 vector) - unit cell vector 1
+    a2 = np.zeros(3)             # (3x1 vector) - unit cell vector 2
+    a3 = np.zeros(3)             # (3x1 vector) - unit cell vector 3
+    volume = None                # (float) - unit cell volume
 
     # Constructor
     def __init__(self, lattice_params_in):
@@ -71,21 +71,20 @@ class UnitCell:
 # Note: y is in the loading dir (positive = up), z is in the beam dir (positive = toward the source)
 class Grain:
     # class variables
-    unitCell = None                # holds all info on crystal unit cell
-    grainDimensions = np.zeros(3)  # grain dimensions (x,y,z)
-    grainCOM = np.zeros(3)         # grain centroids/ center of mass (x,y,z) in sample coord system
-    orientation = np.zeros(4)      # orientation of the grain, which provides crystal to sample
-                                   # transformation (quaternions) (w, x, y, z)
-    intensity = None               # Set intensities for all spots of each grain (nice way to
-                                   # differentiate by sight)
+    unitCell = None                # (UnitCell object) - holds all info on crystal unit cell
+    grainDimensions = np.zeros(3)  # (3x1 vector) - grain dimensions (x,y,z) in mm
+    grainCOM = np.zeros(3)         # (3x1 vector) - grain centroids/ center of mass (x,y,z) in
+                                   # sample coord system in mm
+    orientation = np.zeros(4)      # (4x1 vector) - orientation of the grain, which provides
+                                   # crystal to sample transformation (nomralized quaternion)
+                                   # (w, x, y, z)
 
     # Constructor
-    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_in, intensity_in):
+    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_in):
         self.unitCell = unit_cell_in
         self.grainDimensions = grain_dim_in
         self.grainCOM = grain_com_in
         self.orientation = orient_in
-        self.intensity = intensity_in
 
     # Other Functions
     def quat2rotmat(self):
@@ -124,24 +123,98 @@ class Grain:
         self.orientation[2] = (rot_mat[0, 2] - rot_mat[2, 0]) / (4 * self.orientation[0])
         self.orientation[3] = (rot_mat[1, 0] - rot_mat[0, 1]) / (4 * self.orientation[0])
 
+    def dimen2meters(self):
+        # ******************************************************************************************
+        # Name:    dimen2meters
+        # Purpose: function that returns the dimensions of the grain in meters
+        # Input:   none
+        # Output:  dimen_meters (3x1 vector) - holds the dimension of the grain in meters
+        # Notes:   none
+        # ******************************************************************************************
+
+        return self.grainDimensions * 1e-3
+
+
+# Class: Mesh
+# Description: Class to hold grain mesh information
+# Note: none
+class Mesh:
+    # class variables
+    grain = None       # (Grain object) - holds Grain object to hold grain info for mesh
+    numBlocksX = None  # (float) - holds number of blocks in the x-dir of the mesh
+    numBlocksY = None  # (float) - holds number of blocks in the y-dir of the mesh
+    numBlocksZ = None  # (float) - holds number of blocks in the z-dir of the mesh
+    sizeBlockX = None  # (float) - holds x-dimension of a block in the mesh (meters)
+    sizeBlockY = None  # (float) - holds y-dimension of a block in the mesh (meters)
+    sizeBlockZ = None  # (float) - holds z-dimension of a block in the mesh (meters)
+    blockVol = None    # (float) - holds the volume of a block in the mesh (m^3)
+    mesh = None        # (p x 4 matrix) - holds the mesh position (m) and volume (m^3) in the form
+                       # [x, y, z, vol] for p mesh blocks where p = X * Y * Z numblocks
+
+    # Constructor
+    def __init__(self, grain_in, blocks_x_in=1, blocks_y_in=1, blocks_z_in=1):
+        self.grain = grain_in
+        self.numBlocksX = blocks_x_in
+        self.numBlocksY = blocks_y_in
+        self.numBlocksZ = blocks_z_in
+        self.sizeBlockX = self.grain.grainDimensions[0] / self.numBlocksX
+        self.sizeBlockY = self.grain.grainDimensions[1] / self.numBlocksY
+        self.sizeBlockZ = self.grain.grainDimensions[2] / self.numBlocksZ
+        self.blockVol = self.sizeBlockX * self.sizeBlockY * self.sizeBlockZ
+        self.generate_mesh()
+
+    # Other Functions
+    def generate_mesh(self):
+        # ******************************************************************************************
+        # Name:    generate_mesh
+        # Purpose: function that generates the mesh for this object in the form of parallelopiped
+        # Input:   none
+        # Output:  none
+        # Notes:   Dimension units in mm
+        # ******************************************************************************************
+
+        # initialize variables
+        total_blocks = self.numBlocksX * self.numBlocksY * self.numBlocksZ
+
+        # create array of positions for mesh blocks centered at (0,0,0)
+        block_x = np.linspace(-self.grain.grainDimensions[0] / 2 + self.sizeBlockX / 2,
+                              self.grain.grainDimensions[0] / 2 - self.sizeBlockX / 2,  self.numBlocksX)
+        block_y = np.linspace(-self.grain.grainDimensions[1] / 2 + self.sizeBlockY / 2,
+                              self.grain.grainDimensions[1] / 2 - self.sizeBlockY / 2, self.numBlocksY)
+        block_z = np.linspace(-self.grain.grainDimensions[2] / 2 + self.sizeBlockZ / 2,
+                              self.grain.grainDimensions[2] / 2 - self.sizeBlockZ / 2, self.numBlocksZ)
+
+        # generate mesh of positions
+        mesh = np.array(np.meshgrid(block_x, block_y, block_z)).T.reshape(-1, 3)
+
+        # add column of volumes
+        volumes = np.ones(total_blocks).reshape((total_blocks, 1))
+        volumes = volumes * self.blockVol
+        mesh = np.hstack((mesh, volumes))
+
+        # add to object mesh
+        self.mesh = mesh
+
 
 # Class: Sample
 # Description: Class to hold sample information
 # Note: none
 class Sample:
     # class variables
-    grains = np.array((1, 1), dtype=Grain)  # holds all grains in sample,
-                                            # ENTERED AS VERTICAL VECTOR OF GRAINS
-    numGrains = None                        # number of grains in sample
-    omegaLow = None                         # lower bound of sample rotation omega (degrees)
-    omegaHigh = None                        # upper bound of sample rotation omega (degrees)
-    omegaStepSize = None                    # step size of sample rotation omega (degrees)
+    grains = np.empty(1, dtype=Grain)  # (n x 1 vector) - holds n grains in sample
+    meshes = np.empty(1, dtype=Mesh)   # (n x 1 vector) - holds n mesh in sample
+    numGrains = None                   # (integer) - number of grains in sample
+    omegaLow = None                    # (float) - lower bound of sample rotation omega (degrees)
+    omegaHigh = None                   # (float) - upper bound of sample rotation omega (degrees)
+    omegaStepSize = None               # (float) - step size of sample rotation omega (degrees)
 
     # Constructor
-    def __init__(self, grains_in, omega_low_in, omega_high_in, omega_step_size_in):
+    def __init__(self, grains_in, omega_low_in, omega_high_in, omega_step_size_in, meshes_in=-1):
         self.grains = grains_in
         self.numGrains = self.grains.shape[0]
         self.omegaLow = omega_low_in
         self.omegaHigh = omega_high_in
         self.omegaStepSize = omega_step_size_in
+        self.meshes = meshes_in
+
 

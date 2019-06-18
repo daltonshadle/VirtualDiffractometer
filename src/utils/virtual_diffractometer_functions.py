@@ -320,6 +320,109 @@ def compute_crystal_pos_lab(p_sample, omega):
     return p_lab
 
 
+def sing_crystal_find_det_intercept_mesh(detector, mesh, k_out_lab, omega):
+    # **********************************************************************************************
+    # Name:    sing_crystal_find_det_intercept_mesh
+    # Purpose: function that calculates detector intercepts from a single crystal virtual
+    #          diffraction experiment using a mesh
+    # Input:   detector (object) - holds all detector info
+    #          mesh (object) - holds mesh info for grain
+    #          k_out_lab (3 x n matrix) - holds outgoing wave vectors for n events in lab
+    #                                     coord system
+    #          omega (1 x n matrix) - holds omega values for n diffraction events
+    # Output:  Function outputs a tuple in the form [zeta, zeta_pix, k_out_lab, omega]
+    #          zeta (3 x p matrix) - holds the position vectors (x,y,z) of intercepts where p =
+    #                                events occurred * mesh points
+    #          zeta_pix (2 x p matrix) - holds the position vectors (x,y) of pixels on the detector
+    #                                    where p = events occurred * mesh points
+    #          n_k_out_lab (3 x p matrix) - holds outgoing wave vectors in lab coord system for
+    #                                       each pixel intercepts p = events occurred * mesh points
+    #          n_omega (1 x p matrix) - holds omega values for each pixel intercepts p = events
+    #                                   occurred * mesh points
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize variables
+    zeta = np.empty((3, 0))
+    n_k_out_lab = np.empty((3, 0))
+    n_omega = np.empty((0,))
+
+    # Calculate magnitude and unit vectors for outgoing wavelength
+    mag_k_out_lab = np.linalg.norm(k_out_lab, axis=0)
+    mat_mag_k_out = np.tile(mag_k_out_lab, (3, 1))
+    unit_k_out_lab = np.divide(k_out_lab, mat_mag_k_out)
+
+    # iterate over each block in the mesh
+    for i in range(np.shape(mesh.mesh)[0]):
+        # calculate p_sample for this block and create n instances
+        p_sample = mesh.grain.grainCOM + mesh.mesh[i, 0:3]
+
+        # Get p_lab with call to compute_crystal_position_lab (3 x n matrix)
+        p_lab = compute_crystal_pos_lab(p_sample, omega)
+
+        # Calculate scale factor z
+        z = -1 * np.divide(np.add(detector.distance, p_lab[2, :]), unit_k_out_lab[2, :])
+
+        # Calculate intercept vectors
+        temp_zeta = p_lab + np.multiply(np.tile(z, (3, 1)), unit_k_out_lab)
+        zeta = np.hstack((zeta, temp_zeta))
+
+        # Add values to new lists
+        n_k_out_lab = np.hstack((n_k_out_lab, k_out_lab))
+        n_omega = np.hstack((n_omega, omega))
+
+    # Calculate intercept pixels
+    zeta_pix = zeta * detector.pixel_density_mm
+    zeta_pix = zeta_pix[0:2, :]
+
+    return [zeta, zeta_pix, n_k_out_lab, n_omega]
+
+
+def multi_crystal_find_det_intercept_mesh(detector, mesh_list, k_out_lab_list, omega_list):
+    # **********************************************************************************************
+    # Name:    multi_crystal_find_det_intercept_mesh
+    # Purpose: function that calculates detector intercepts from a multi crystal virtual
+    #          diffraction experiment
+    # Input:   detector (object) - holds detector info
+    #          mesh_list (m x 1 list) - holds m mesh objects
+    #          k_out_lab_list (m x n x 3 matrix) -  holds m crystals outgoing wave vectors in the
+    #                                               lab coord system for n diffraction events
+    #          omega_list (m x n x 1 matrix) -  holds m crystals omega values for n diffraction
+    #                                           events
+    # Output:  Function outputs a tuple in the form [zeta, zeta_pix]
+    #          zeta (3 x p matrix) - holds the position vectors (x,y,z) of intercepts where p
+    #                                events occurred, p = m * n * mesh points
+    #          zeta_pix (2 x p matrix) - holds the position vectors (x,y) of pixels on the detector
+    #                                    where p events occurred, p = m * n * mesh points
+    #          new_k_out_list (3 x p matrix) - holds outgoing vectors in lab coord system for p
+    #                                          events, p = m * n * mesh points
+    #          new_omega_list (1 x p matrix) - holds omega values for p events, p = m * n * mesh
+    #                                          points
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize zeta and zeta_pix
+    zeta = np.empty((3, 0))
+    zeta_pix = np.empty((2, 0))
+    new_k_out_list = np.empty((3, 0))
+    new_omega_list = np.empty((0, ))
+
+    # iterate over each mesh and call single_crystal_find_detector_intercept_mesh, add to lists
+    for i in range(len(mesh_list)):
+        k_out_lab = k_out_lab_list[i]
+        mesh = mesh_list[i]
+        omega = omega_list[i]
+        [temp_zeta, temp_zeta_pix, n_k_out, n_omega] = \
+            sing_crystal_find_det_intercept_mesh(detector, mesh, k_out_lab, omega)
+        # add to lists
+        zeta = np.hstack((zeta, temp_zeta))
+        zeta_pix = np.hstack((zeta_pix, temp_zeta_pix))
+        new_k_out_list = np.hstack((new_k_out_list, n_k_out))
+        new_omega_list = np.hstack((new_omega_list, n_omega))
+
+    return [zeta, zeta_pix, new_k_out_list, new_omega_list]
+
+
 def sing_crystal_find_det_intercept(detector, p_sample, k_out_lab, omega):
     # **********************************************************************************************
     # Name:    sing_crystal_find_det_intercept
@@ -344,8 +447,8 @@ def sing_crystal_find_det_intercept(detector, p_sample, k_out_lab, omega):
 
     # Calculate magnitude and unit vectors for outgoing wavelength
     mag_k_out_lab = np.linalg.norm(k_out_lab, axis=0)
-    mat_k_out = np.tile(mag_k_out_lab, (3, 1))
-    unit_k_out_lab = np.divide(k_out_lab, mat_k_out)
+    mat_mag_k_out = np.tile(mag_k_out_lab, (3, 1))
+    unit_k_out_lab = np.divide(k_out_lab, mat_mag_k_out)
 
     # Calculate scale factor z
     z = -1 * np.divide(np.add(detector.distance, p_lab[2, :]), unit_k_out_lab[2, :])
@@ -400,10 +503,10 @@ def multi_crystal_find_det_intercept(detector, crystal_list, k_out_lab_list, ome
     return [zeta, zeta_pix, new_omega_list]
 
 
-def display_detector(detector, zeta_pix, omega, omega_bounds, circle=False, radius=1000):
+def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=False, radius=1000):
     # **********************************************************************************************
-    # Name:    detector_intercept
-    # Purpose: function that displays virtual diffraction image
+    # Name:    display_detector_bounded
+    # Purpose: function that displays virtual diffraction image, bounded by omegas
     # Input:   detector (object) - holds all detector info
     #          zeta_pix (n x 2 matrix) - holds the position vectors (x,y) of pixels on the detector
     #                                    where n events occurred
@@ -435,6 +538,36 @@ def display_detector(detector, zeta_pix, omega, omega_bounds, circle=False, radi
     # plot using a scatter
     fig, ax = plot.subplots(nrows=1, ncols=1)
     ax.scatter(x, y, marker=".", color="white", s=3)
+    # adding circle to plot
+    if circle:
+        [circle_x, circle_y] = add_circle([], [], radius=radius)
+        ax.scatter(circle_x, circle_y, marker=".", color="red", s=1)
+    ax.set_facecolor('xkcd:black')
+    plot.xlim(-detector.width / 2, detector.width / 2)
+    plot.ylim(-detector.height / 2, detector.height / 2)
+    plot.show()
+
+    return 0
+
+
+def display_detector(detector, zeta_pix, circle=False, radius=1000):
+    # **********************************************************************************************
+    # Name:    detector_intercept
+    # Purpose: function that displays virtual diffraction image
+    # Input:   detector (object) - holds all detector info
+    #          zeta_pix (n x 2 matrix) - holds the position vectors (x,y) of pixels on the detector
+    #                                    where n events occurred
+    # Output:  Scatter plot image of the diffraction events
+    # Notes:   none
+    # **********************************************************************************************
+
+    # grabbing all x and y values, adding a point for the transmitted incoming at the origin
+    all_x = np.append(zeta_pix[0, :].tolist(), [0])
+    all_y = np.append(zeta_pix[1, :].tolist(), [0])
+
+    # plot using a scatter
+    fig, ax = plot.subplots(nrows=1, ncols=1)
+    ax.scatter(all_x, all_y, marker=".", color="white", s=3)
     # adding circle to plot
     if circle:
         [circle_x, circle_y] = add_circle([], [], radius=radius)

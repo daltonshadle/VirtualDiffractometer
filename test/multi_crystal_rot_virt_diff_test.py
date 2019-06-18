@@ -8,15 +8,16 @@
 
 # ********************************************* Imports ********************************************
 from classes.equipment_class import Detector, LabSource
-from classes.sample_class import UnitCell, Grain, Sample
+from classes.sample_class import UnitCell, Grain, Sample, Mesh
 from utils.sample_functions import read_hkl_from_csv, gen_hkl_fam_from_list
-from utils.virtual_diffractometer_functions import (sing_crystal_rot_diff_exp,
-                                                    multi_crystal_rot_diff_exp,
-                                                    sing_crystal_find_det_intercept,
+from utils.virtual_diffractometer_functions import (multi_crystal_rot_diff_exp,
                                                     multi_crystal_find_det_intercept,
-                                                    display_detector)
+                                                    multi_crystal_find_det_intercept_mesh,
+                                                    display_detector,
+                                                    display_detector_bounded)
 import numpy as np
 import time
+import os
 
 # *************************************** Variable Definitions *************************************
 
@@ -35,24 +36,32 @@ quat_1 = np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3])
 quat_2 = np.array([1.0, 0, 0, 0])
 quat_3 = np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3])
 # Grain_1 parameters (unitCell, dimension, COM, orientation, intensity)
-Grain_1 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([0, 0, 0]), quat_1, 100)
-Grain_2 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([5, 0, 0]), quat_2, 100)
-Grain_3 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([-5, 0, 0]), quat_3, 100)
+Grain_1 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([0, 0, 0]), quat_1)
+Grain_2 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([5, 0, 0]), quat_2)
+Grain_3 = Grain(unitCell_2, np.array([1.0, 1.0, 1.0]), np.array([-5, 0, 0]), quat_3)
+
+# Mesh_1 parameters (grain, numX, numY, numZ)
+Mesh_1 = Mesh(Grain_1, 5, 5, 5)
+Mesh_2 = Mesh(Grain_2, 5, 5, 5)
+Mesh_3 = Mesh(Grain_3, 5, 5, 5)
 
 # Sample_1 parameters (grains in a list, omegaLow, omegaHigh, omegaStepSize) (degrees)
 omegaLow = 0
 omegaHigh = 180
-Sample_1 = Sample(np.array([Grain_1, Grain_2, Grain_3]), omegaLow, omegaHigh, 1)
+Sample_1 = Sample(np.array([Grain_1, Grain_2, Grain_3]), omegaLow, omegaHigh, 1,
+                  np.array([Mesh_1, Mesh_2, Mesh_3]))
 
 
 # ************************************* Test Function Definition ***********************************
 def test():
     # initialize hkl vectors and omega_bounds
-    path = "C:\Git Repositories\VirtualDiffractometer\data\hkl_list_3.csv"
+    path = os.getcwd()
+    path = path.split("/src")[0] + "/data/hkl_list_3.csv"
     hkl_list = read_hkl_from_csv(path)
     hkl_list = gen_hkl_fam_from_list(hkl_list, cubic=True)
 
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
+    display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh]
 
     print("Starting #1")
     # call multi_crystal_diff, time is for measuring length of calculation
@@ -63,19 +72,28 @@ def test():
 
     # call multi_crystal_intercept, takes list of p_sample, k_out, omega for each crystal
     p_sample_list = []
+    mesh_list = []
     k_out_list = []
     omega_list = []
 
     for i in range(len(Sample_1.grains)):
         p_sample_list.append(Sample_1.grains[i])
+        mesh_list.append(Sample_1.meshes[i])
         k_out_list.append(multi_rot_diff_list[i][2])
         omega_list.append(multi_rot_diff_list[i][3])
-    [zeta, zeta_pix, new_omega] = multi_crystal_find_det_intercept(Detector_1, p_sample_list,
-                                                                        k_out_list, omega_list)
+
+
+    [zeta, zeta_pix, new_k_out, new_omega] = \
+        multi_crystal_find_det_intercept_mesh(Detector_1, mesh_list, k_out_list, omega_list)
 
     # call display_detector for generating a diffraction image
-    display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh]
-    display_detector(Detector_1, zeta_pix, new_omega, display_omega_bounds)
+    display_detector_bounded(Detector_1, zeta_pix, new_omega, display_omega_bounds)
+
+    [zeta, zeta_pix, new_omega] = multi_crystal_find_det_intercept(Detector_1, p_sample_list,
+                                                                   k_out_list, omega_list)
+
+    # call display_detector for generating a diffraction image
+    display_detector_bounded(Detector_1, zeta_pix, new_omega, display_omega_bounds)
 
     return 0
 
