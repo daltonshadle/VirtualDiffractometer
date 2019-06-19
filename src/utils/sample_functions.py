@@ -10,6 +10,8 @@
 # ********************************************* Imports ********************************************
 import numpy as np
 import csv
+from classes.sample_class import UnitCell, Grain, Mesh
+from utils.math_functions import normalize
 
 
 # *************************************** Function Definitions *************************************
@@ -125,4 +127,65 @@ def read_hkl_from_csv(file_path):
             line_count += 1
         print(f'Processed {line_count} hkl vectors.')
     return hkl_list
+
+
+def read_grains_from_csv(file_path):
+    # **********************************************************************************************
+    # Name:    read_grains_from_csv
+    # Purpose: function that reads grain data from csv and returns as list of grains
+    # Input:   file_path (string) - path of csv file to read from, csv must store grains as (n x 13)
+    # Output:  grain_list (list) - matrix that holds n grains from csv file
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize return list
+    grain_list = []
+
+    # open csv storing hkl vectors
+    with open(file_path) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+
+        temp_cell = UnitCell(np.array([4, 4, 4, 90, 90, 90]))
+
+        # iterate over all rows in csv and add to grain list
+        for row in csv_reader:
+            if line_count != 0:
+                dim_vec = np.array([float(row[0]), float(row[1]), float(row[2])])
+                com_vec = np.array([float(row[3]), float(row[4]), float(row[5])])
+                quat_vec = np.array([float(row[6]), float(row[7]), float(row[8]), float(row[9])])
+                orient_vec = np.array([float(row[10]), float(row[11]), float(row[1])])
+
+                # normalize vectors
+                quat_vec = normalize(quat_vec)
+                orient_vec = normalize(orient_vec)
+
+                # Grain (unitCell, dimension, COM, orientation)
+                temp_grain = Grain(temp_cell, dim_vec, com_vec, quat_vec)
+                temp_grain.vector2quat(orient_vec)
+
+                # add to list
+                grain_list.append(temp_grain)
+            line_count += 1
+        print(f'Processed {line_count} grains.')
+    return grain_list
+
+
+def mesh_list_from_grain_list(grain_list, mesh_size):
+    # **********************************************************************************************
+    # Name:    mesh_list_from_grain_list
+    # Purpose: function that creates a mesh list from a grain list
+    # Input:   grain_list (list) - list of grains
+    #          mesh_size (float) - size of mesh used
+    # Output:  mesh_list (list) - list of meshes created from grains
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize return list
+    mesh_list = []
+
+    for item in grain_list:
+        mesh_list.append(Mesh(item, mesh_size, mesh_size, mesh_size))
+
+    return mesh_list
 

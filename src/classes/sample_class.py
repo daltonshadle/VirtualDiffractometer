@@ -71,20 +71,20 @@ class UnitCell:
 # Note: y is in the loading dir (positive = up), z is in the beam dir (positive = toward the source)
 class Grain:
     # class variables
-    unitCell = None                # (UnitCell object) - holds all info on crystal unit cell
-    grainDimensions = np.zeros(3)  # (3x1 vector) - grain dimensions (x,y,z) in mm
-    grainCOM = np.zeros(3)         # (3x1 vector) - grain centroids/ center of mass (x,y,z) in
-                                   # sample coord system in mm
-    orientation = np.zeros(4)      # (4x1 vector) - orientation of the grain, which provides
-                                   # crystal to sample transformation (nomralized quaternion)
-                                   # (w, x, y, z)
+    unitCell = None                  # (UnitCell object) - holds all info on crystal unit cell
+    grainDimensions = np.zeros(3)    # (3x1 vector) - grain dimensions (x,y,z) in mm
+    grainCOM = np.zeros(3)           # (3x1 vector) - grain centroids/ center of mass (x,y,z) in
+                                     # sample coord system in mm
+    orientationQuat = np.zeros(4)    # (4x1 vector) - orientation of the grain, which provides
+                                     # crystal to sample transformation (normalized quaternion)
+                                     # (w, x, y, z)
 
     # Constructor
-    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_in):
+    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_quat):
         self.unitCell = unit_cell_in
         self.grainDimensions = grain_dim_in
         self.grainCOM = grain_com_in
-        self.orientation = orient_in
+        self.orientationQuat = orient_quat
 
     # Other Functions
     def quat2rotmat(self):
@@ -97,10 +97,10 @@ class Grain:
         # Notes:   none
         # ******************************************************************************************
 
-        w = self.orientation[0]
-        x = self.orientation[1]
-        y = self.orientation[2]
-        z = self.orientation[3]
+        w = self.orientationQuat[0]
+        x = self.orientationQuat[1]
+        y = self.orientationQuat[2]
+        z = self.orientationQuat[3]
 
         rot_mat = np.matrix([[1-2*(y**2-z**2), 2*(x*y-w*z),     2*(x*z+w*y)],
                              [2*(x*y+w*z),     1-2*(x**2-z**2), 2*(y*z-w*x)],
@@ -118,10 +118,40 @@ class Grain:
         # Notes:   none
         # ******************************************************************************************
 
-        self.orientation[0] = np.sqrt(1 + rot_mat[0, 0] + rot_mat[1, 1] + rot_mat[2, 2]) / 2
-        self.orientation[1] = (rot_mat[2, 1] - rot_mat[1, 2]) / (4 * self.orientation[0])
-        self.orientation[2] = (rot_mat[0, 2] - rot_mat[2, 0]) / (4 * self.orientation[0])
-        self.orientation[3] = (rot_mat[1, 0] - rot_mat[0, 1]) / (4 * self.orientation[0])
+        self.orientationQuat[0] = np.sqrt(1 + rot_mat[0, 0] + rot_mat[1, 1] + rot_mat[2, 2]) / 2
+        self.orientationQuat[1] = (rot_mat[2, 1] - rot_mat[1, 2]) / (4 * self.orientationQuat[0])
+        self.orientationQuat[2] = (rot_mat[0, 2] - rot_mat[2, 0]) / (4 * self.orientationQuat[0])
+        self.orientationQuat[3] = (rot_mat[1, 0] - rot_mat[0, 1]) / (4 * self.orientationQuat[0])
+
+    def vector2quat(self, orient_vec):
+        # ******************************************************************************************
+        # Name:    vector2quat
+        # Purpose: function that sets orientation quaternion from an orientation vector in the
+        #          sample coord system
+        # Input:   orient_vec (3x1 vector) - orientation vector in the sample coord system, where
+        #                                    the other vector is sample vector [0, 1, 0] (up in
+        #                                    loading dir)
+        # Output:  none
+        # Notes:   none
+        # ******************************************************************************************
+
+        # initializing variables
+        sample_vec = np.array([0, 1, 0])
+        mag_orient = np.linalg.norm(orient_vec)
+        mag_sample = np.linalg.norm(sample_vec)
+
+        # cross product of these creates x, y, z of quaternion
+        cross_vec = np.cross(sample_vec, orient_vec)
+
+        # setting quaternion values
+        self.orientationQuat[0] = (np.sqrt(mag_orient ** 2 * mag_sample ** 2)
+                                   + np.dot(sample_vec, orient_vec))
+        self.orientationQuat[1] = cross_vec[0]
+        self.orientationQuat[2] = cross_vec[1]
+        self.orientationQuat[3] = cross_vec[2]
+
+        # normalize quaternion
+        self.orientationQuat = self.orientationQuat / np.linalg.norm(self.orientationQuat)
 
     def dimen2meters(self):
         # ******************************************************************************************
