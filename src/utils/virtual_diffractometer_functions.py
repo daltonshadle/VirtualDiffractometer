@@ -159,27 +159,17 @@ def compute_omega_rot_diff_exp(g_sample, k_in_lab):
                                (2 * np.take(a, index2)))
     zero_solution = np.divide(-np.take(b, index1), (2 * np.take(a, index1)))
 
-    plus_omega = np.array(np.rad2deg(np.real(np.arcsin(plus_solution)))).flatten()
-    minus_omega = np.array(np.rad2deg(np.real(np.arcsin(minus_solution)))).flatten()
-    zero_omega = np.array(np.rad2deg(np.real(np.arcsin(zero_solution)))).flatten()
+    plus_omega = np.array(np.rad2deg(np.real(np.arcsin(plus_solution))))
+    minus_omega = np.array(np.rad2deg(np.real(np.arcsin(minus_solution))))
+    zero_omega = np.array(np.rad2deg(np.real(np.arcsin(zero_solution))))
 
-    # gather all omega solutions and reciprocal lattice vectors in the sample frame
-    total_omega = np.empty((0,), float)
-    g_sample_temp = np.empty((3, 0), float)
-
-    # plus omega solutions
-    total_omega = np.append(total_omega, plus_omega, axis=0)
-    total_omega = np.append(total_omega, np.add(-plus_omega, 180), axis=0)
-    g_sample_temp = np.concatenate(
-        (g_sample_temp, g_sample[:, index2], g_sample[:, index2]), axis=1)
-    # minus omega solutions
-    total_omega = np.append(total_omega, minus_omega, axis=0)
-    total_omega = np.append(total_omega, np.add(-minus_omega, -180), axis=0)
-    g_sample_temp = np.concatenate(
-        (g_sample_temp, g_sample[:, index2], g_sample[:, index2]), axis=1)
-    # zero omega solutions
-    total_omega = np.append(total_omega, zero_omega, axis=0)
-    g_sample_temp = np.concatenate((g_sample_temp, g_sample[:, index1]), axis=1)
+    # gather all omega solutions and reciprocal lattice vectors in the sample frame, the 180 factor
+    # is for finding all possible omega values
+    total_omega = np.hstack((plus_omega, np.add(-plus_omega, 180), minus_omega,
+                            np.add(-minus_omega, -180), zero_omega))
+    g_sample_temp = np.hstack((g_sample[:, index2], g_sample[:, index2],
+                              g_sample[:, index2], g_sample[:, index2], g_sample[:, index1]))
+    total_omega = np.transpose(total_omega)
 
     return [total_omega, g_sample_temp]
 
