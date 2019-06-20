@@ -58,26 +58,21 @@ def test():
     mesh_list = []
     k_out_list = []
     omega_list = []
-
     for i in range(len(Sample_1.grains)):
         p_sample_list.append(Sample_1.grains[i])
         mesh_list.append(Sample_1.meshes[i])
         k_out_list.append(multi_rot_diff_list[i][2])
         omega_list.append(multi_rot_diff_list[i][3])
 
-    [zeta, zeta_pix, new_k_out, new_omega] = \
-        virt_diff_func.multi_crystal_find_det_intercept_mesh(Detector_1, mesh_list, k_out_list,
-                                                             omega_list)
-
-    # call display_detector for generating a diffraction image
-    virt_diff_func.display_detector_bounded(Detector_1, zeta_pix, new_omega, display_omega_bounds)
-
+    # call multi-crystal detector intercept
     [zeta, zeta_pix, new_omega] = virt_diff_func.multi_crystal_find_det_intercept(Detector_1,
                                                                                   p_sample_list,
                                                                                   k_out_list,
                                                                                   omega_list)
-
     # call display_detector for generating a diffraction image
+    virt_diff_func.display_detector_bounded(Detector_1, zeta_pix, new_omega, display_omega_bounds)
+
+    # call display_detector for generating a diffraction animation
     virt_diff_func.display_detector_bounded_animate(Detector_1, zeta_pix, new_omega,
                                                     display_omega_bounds)
 

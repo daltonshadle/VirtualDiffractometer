@@ -205,7 +205,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
 
     # reciprocal lattice vectors (in columns of matrix) in sample coord system
     g_sample = (grain.quat2rotmat() * grain.unitCell.get_reciprocal_lattice_vectors()
-               * np.transpose(hkl_list))
+                * np.transpose(hkl_list))
 
     # compute omega values for rotating diffraction experiment
     [total_omega, g_sample] = compute_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
@@ -225,21 +225,16 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     # build reciprocal lattice vector list in the lab coord system
     sin_omega = np.sin(np.deg2rad(total_omega))
     cos_omega = np.cos(np.deg2rad(total_omega))
-    g_lab = np.empty((3, 0), float)
 
-    for y in range(0, len(total_omega)):
-        rotmat_L2C = np.matrix([[cos_omega[y],  0, sin_omega[y]],
-                                [0,             1,           0],
-                                [-sin_omega[y], 0, cos_omega[y]]])
+    # create components of g_lab, reminder g_sample (0 = x, 1 = y, 2 = z)
+    g_lab_x = np.multiply(cos_omega, g_sample[0, :]) + np.multiply(sin_omega, g_sample[2, :])
+    g_lab_y = g_sample[1, :]
+    g_lab_z = np.multiply(-sin_omega, g_sample[0, :]) + np.multiply(cos_omega, g_sample[2, :])
+    g_lab = np.vstack((g_lab_x, g_lab_y, g_lab_z))
 
-        temp_g_lab = rotmat_L2C * g_sample[:, y]
-        g_lab = np.append(g_lab, temp_g_lab, axis=1)
-
-    # build outgoing wave vector list in the lab coord system
-    k_in_mat = np.ones(np.shape(g_lab))
-    for i in range(0, 3):
-        k_in_mat[i, :] = k_in_mat[i, :] * labsource.k_in_lab[i]
-
+    # build outgoing wave vector list in the lab coord system, k_in_mat is a matrix of repeating k_in
+    # vectors the size of g_lab for easy matrix addition
+    k_in_mat = np.transpose(np.tile(labsource.k_in_lab, (np.shape(g_lab)[1], 1)))
     k_out_lab = k_in_mat + g_lab
 
     # get rid of bad solutions
@@ -247,6 +242,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     mag_k_in = np.linalg.norm(labsource.k_in_lab)
     mag_k_out = np.linalg.norm(k_out_lab, axis=0)
 
+    # preparing outputs
     index = np.where(np.abs((mag_k_out - mag_k_in) / mag_k_in) < precis)
     total_omega = total_omega[index]
     g_sample = g_sample[:, index]
