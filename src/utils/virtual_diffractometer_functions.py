@@ -7,13 +7,12 @@
 # **************************************************************************************************
 
 # ********************************************* Imports ********************************************
-from classes.equipment_class import LabSource, Detector
-from classes.sample_class import Grain, UnitCell, Sample
+# Standard Library
 import numpy as np
 import matplotlib.pyplot as plot
 import matplotlib.animation as plot_ani
-import sympy
 import scipy.constants as sciconst
+# My Library
 
 
 # *************************************** Function Definitions *************************************

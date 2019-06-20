@@ -8,8 +8,10 @@
 
 
 # ********************************************* Imports ********************************************
+# Standard Library
 import numpy as np
 import scipy.constants as sciconst
+# My Library
 
 
 # ***************************************** Class Definitions **************************************
