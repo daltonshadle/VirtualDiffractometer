@@ -39,7 +39,7 @@ def djshadle_sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     g_sample = (grain.quat2rotmat() * grain.unitCell.get_reciprocal_lattice_vectors()
                 * np.transpose(hkl_list))
 
-    # compute magnitude of reciprocal-lattice vectors, reshape to (m x 1 matrix) where m = # of hkl
+    # calc magnitude of reciprocal-lattice vectors, reshape to (m x 1 matrix) where m = # of hkl
     mag_g_sample = np.linalg.norm(g_sample, axis=0)
     mag_g_sample = np.reshape(mag_g_sample, (1, -1))
 
@@ -56,7 +56,7 @@ def djshadle_sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     bottom = np.delete(bottom, bad_arcsin_indices)
     g_sample = np.delete(g_sample, bad_arcsin_indices, axis=1)
 
-    # compute omega values, stack corresponding values, omega is in radians
+    # calc omega values, stack corresponding values, omega is in radians
     beta = np.abs(np.arcsin(g_sample[2, :] / bottom))
     omega_part1 = -1 * (np.arcsin(arcsin_inside) - beta)
     omega_part2 = sciconst.pi - omega_part1
@@ -120,12 +120,12 @@ def djshadle_sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     return [two_theta, eta, k_out_lab, total_omega]
 
 
-def compute_omega_rot_diff_exp(g_sample, k_in_lab):
+def calc_omega_rot_diff_exp(g_sample, k_in_lab):
     # **********************************************************************************************
-    # Name:    compute_omega_rot_diff_exp
+    # Name:    calc_omega_rot_diff_exp
     # Purpose: function that calculates omega values given reciprocal lattice vectors and wavelength
     # Input:   g_sample (3 x m matrix) - contains reciprocal lattice vectors in the sample coord
-    #                                    system to compute omega values for
+    #                                    system to calc omega values for
     #          k_in_lab (1 x 3 vector) - vector of the incoming x-ray in the lab coord system
     # Output:  Function outputs a tuple in the form [omega, g_sample]
     #          omega (n x 1 matrix) - omega values for n diffraction events in degrees
@@ -174,6 +174,19 @@ def compute_omega_rot_diff_exp(g_sample, k_in_lab):
     return [total_omega, g_sample_temp]
 
 
+def calc_g_sample(grain, hkl_list):
+    # **********************************************************************************************
+    # Name:    calc_g_sample
+    # Purpose: function calculates the reciprocal lattice vectors for a single crystal
+    # Input:   grain (object) - contains grain information
+    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
+    # Output:  g_sample (3 x m) - reciprocal lattice vectors for m hkl planes
+    # Notes:   none
+    # **********************************************************************************************
+    return (grain.quat2rotmat() * grain.reciprocal_strain() *
+            grain.unitCell.get_reciprocal_lattice_vectors() * np.transpose(hkl_list))
+
+
 def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     # **********************************************************************************************
     # Name:    sing_crystal_rot_diff_exp
@@ -189,16 +202,16 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events (in lab
     #                                     coord system)
     #          total_omega (n x 1 matrix) - omega values for n diffraction events
-    # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell and omega
-    #          bounds)
+    # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell, omega
+    #          bounds, omega, two_theta, eta)
     # **********************************************************************************************
 
-    # reciprocal lattice vectors (in columns of matrix) in sample coord system
-    g_sample = (grain.quat2rotmat() * grain.unitCell.get_reciprocal_lattice_vectors()
-                * np.transpose(hkl_list))
+    # reciprocal lattice vectors (in columns of matrix) in sample coord system,
+    # grain.reciprocal_strain is calculated in sample_class.py and accounts for zero strain input
+    g_sample = calc_g_sample(grain, hkl_list)
 
-    # compute omega values for rotating diffraction experiment
-    [total_omega, g_sample] = compute_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
+    # calc omega values for rotating diffraction experiment
+    [total_omega, g_sample] = calc_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
 
     # complete bounds control for omega bounds
     low_bounds_index = np.where(total_omega < omegabounds[0])[0]
@@ -222,8 +235,8 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     g_lab_z = np.multiply(-sin_omega, g_sample[0, :]) + np.multiply(cos_omega, g_sample[2, :])
     g_lab = np.vstack((g_lab_x, g_lab_y, g_lab_z))
 
-    # build outgoing wave vector list in the lab coord system, k_in_mat is a matrix of repeating k_in
-    # vectors the size of g_lab for easy matrix addition
+    # build outgoing wave vector list in the lab coord system, k_in_mat is a matrix of repeating k_
+    # in vectors the size of g_lab for easy matrix addition
     k_in_mat = np.transpose(np.tile(labsource.k_in_lab, (np.shape(g_lab)[1], 1)))
     k_out_lab = k_in_mat + g_lab
 
@@ -235,8 +248,8 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     # preparing outputs
     index = np.where(np.abs((mag_k_out - mag_k_in) / mag_k_in) < precis)
     total_omega = total_omega[index]
-    g_sample = g_sample[:, index]
-    g_lab = g_lab[:, index]
+    g_sample = g_sample[:, index].reshape(3, -1)
+    g_lab = g_lab[:, index].reshape(3, -1)
     k_out_lab = k_out_lab[:, index]
     k_out_lab = k_out_lab[:, 0]
 
@@ -246,7 +259,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     two_theta = np.rad2deg(2 * np.arcsin(np.divide(mag_g, (2 * mag_k_in))))
     eta = np.rad2deg(np.arctan2(k_out_lab[1, :], k_out_lab[0, :]))
 
-    return [two_theta, eta, k_out_lab, total_omega]
+    return [two_theta, eta, k_out_lab, total_omega, g_sample]
 
 
 def multi_crystal_rot_diff_exp(labsource, crystal_list, hkl_list, omegabounds):
@@ -276,9 +289,9 @@ def multi_crystal_rot_diff_exp(labsource, crystal_list, hkl_list, omegabounds):
     return multi_crystal_list
 
 
-def compute_crystal_pos_lab(p_sample, omega):
+def calc_crystal_pos_lab(p_sample, omega):
     # **********************************************************************************************
-    # Name:    compute_crystal_position_lab
+    # Name:    calc_crystal_position_lab
     # Purpose: function calculates crystal position vectors in lab during a rotating diffraction exp
     # Input:   p_sample (3 x 1 vector) - crystal position vector in the sample coord system
     #          omega (n x 1 vector) - omega values for n diffraction events
@@ -348,8 +361,8 @@ def sing_crystal_find_det_intercept_mesh(detector, mesh, k_out_lab, omega):
         # calculate p_sample for this block and create n instances
         p_sample = mesh.grain.grainCOM + mesh.mesh[i, 0:3]
 
-        # Get p_lab with call to compute_crystal_position_lab (3 x n matrix)
-        p_lab = compute_crystal_pos_lab(p_sample, omega)
+        # Get p_lab with call to calc_crystal_position_lab (3 x n matrix)
+        p_lab = calc_crystal_pos_lab(p_sample, omega)
 
         # Calculate scale factor z
         z = -1 * np.divide(np.add(detector.distance, p_lab[2, :]), unit_k_out_lab[2, :])
@@ -433,8 +446,8 @@ def sing_crystal_find_det_intercept(detector, p_sample, k_out_lab, omega):
     # Notes:   none
     # **********************************************************************************************
 
-    # Get p_lab with call to compute_crystal_position_lab (3 x n matrix)
-    p_lab = compute_crystal_pos_lab(p_sample, omega)
+    # Get p_lab with call to calc_crystal_position_lab (3 x n matrix)
+    p_lab = calc_crystal_pos_lab(p_sample, omega)
 
     # Calculate magnitude and unit vectors for outgoing wavelength
     mag_k_out_lab = np.linalg.norm(k_out_lab, axis=0)

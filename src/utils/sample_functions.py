@@ -39,7 +39,7 @@ def gen_hkl_fam(hkl_vec, cubic=False, hexagonal=False):
         check = np.abs(h) + np.abs(k) + np.abs(l)
         values = np.array([h, -h, k, -k, l, -l])
 
-        # Iterate over the range of values and compute possible hkl vectors, add to list if in fam
+        # Iterate over the range of values and calc possible hkl vectors, add to list if in fam
         for m in range(0, len(values)):
             for n in range(0, len(values)):
                 for o in range(0, len(values)):
@@ -53,7 +53,7 @@ def gen_hkl_fam(hkl_vec, cubic=False, hexagonal=False):
         check = np.abs(h) + np.abs(k) + np.abs(i)
         values = np.array([h, -h, k, -k, i, -i])
 
-        # Iterate over the range of values and compute possible hkl vectors, add to list if in fam
+        # Iterate over the range of values and calc possible hkl vectors, add to list if in fam
         for m in range(0, len(values)):
             for n in range(0, len(values)):
                 for o in range(0, len(values)):

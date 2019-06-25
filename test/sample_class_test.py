@@ -12,6 +12,8 @@ import numpy as np
 
 # My Library
 import classes.sample_class as sample_class
+import utils.strain_functions as strain_func
+import utils.math_functions as math_func
 
 
 # *************************************** Variable Definitions *************************************
@@ -34,8 +36,14 @@ Mesh_1 = sample_class.Mesh(Grain_1, 5, 5, 5)
 
 # ************************************* Test Function Definition ***********************************
 def test():
-    Grain_1.vector2quat(np.array([0, 0, 1]))
-    print(Grain_1.orientationQuat)
+    planes = np.array([[1, 3, 4],
+                       [1, 1, 1]])
+    planes = math_func.normalize_rows(planes)
+    strain = np.array([[.01],
+                       [.02]])
+
+    rose = strain_func.strain_rosette(strain, planes)
+
 
     return 0
 

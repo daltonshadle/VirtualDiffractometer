@@ -80,13 +80,17 @@ class Grain:
     orientationQuat = np.zeros(4)    # (4x1 vector) - orientation of the grain, which provides
                                      # crystal to sample transformation (normalized quaternion)
                                      # (w, x, y, z)
+    grainStrain = np.zeros(3)        # (3x3 matrix) - strain of the grain in tensor form in the
+                                     # crystal coord system, zeros matrix is the initial value
 
     # Constructor
-    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_quat):
+    def __init__(self, unit_cell_in, grain_dim_in, grain_com_in, orient_quat,
+                 grain_strain_in=np.zeros(3)):
         self.unitCell = unit_cell_in
         self.grainDimensions = grain_dim_in
         self.grainCOM = grain_com_in
         self.orientationQuat = orient_quat
+        self.grainStrain = grain_strain_in
 
     # Other Functions
     def quat2rotmat(self):
@@ -165,6 +169,18 @@ class Grain:
         # ******************************************************************************************
 
         return self.grainDimensions * 1e-3
+
+    def reciprocal_strain(self):
+        # ******************************************************************************************
+        # Name:    reciprocal_strain
+        # Purpose: function that returns reciprocal strain of the crystal stretched by (I-e) where
+        #          e = grainStrain
+        # Input:   none
+        # Output:  recip_strain (3x3 matrix) - reciprocal strain of the crystal
+        # Notes:   none
+        # ******************************************************************************************
+
+        return np.eye(3) - self.grainStrain
 
 
 # Class: Mesh
