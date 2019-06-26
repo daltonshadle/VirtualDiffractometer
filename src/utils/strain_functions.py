@@ -33,11 +33,21 @@ def strain_rosette(lattice_strain, plane_normals):
                            np.multiply(plane_normals[:, 1], plane_normals[:, 2]),
                            np.multiply(plane_normals[:, 0], plane_normals[:, 2]),
                            np.multiply(plane_normals[:, 0], plane_normals[:, 1])])
+
+    # reshape matrix and vector for mldivide
     cos_matrix = np.transpose(cos_matrix)
     cos_matrix = cos_matrix.reshape((-1, 6))
+    lattice_strain = lattice_strain.reshape(-1)
+
+    print(plane_normals)
+    print(cos_matrix)
 
     # calculate strain vector
-    strain_vec = np.linalg.lstsq(cos_matrix, lattice_strain, rcond=None)[0]
+    strain_vec = math_func.mldivide(cos_matrix, lattice_strain)
+
+    # account for precision of mldivide
+    precis = 1e-10
+    strain_vec[(np.where(np.abs(strain_vec) < precis))] = 0
 
     return strain_vec
 
@@ -52,9 +62,9 @@ def strain_vec2tensor(strain_vec):
     # **********************************************************************************************
 
     # calculate strain tensor
-    return np.array([[strain_vec[0], strain_vec[5], strain_vec[4]],
-                     [strain_vec[5], strain_vec[1], strain_vec[3]],
-                     [strain_vec[4], strain_vec[3], strain_vec[2]]]).reshape((3, 3))
+    return np.array([[strain_vec[0],     strain_vec[5] / 2, strain_vec[4] / 2],
+                     [strain_vec[5] / 2, strain_vec[1],     strain_vec[3] / 2],
+                     [strain_vec[4] / 2, strain_vec[3] / 2, strain_vec[2]]]).reshape((3, 3))
 
 
 def strain_tensor2vec(strain_mat):
@@ -70,9 +80,9 @@ def strain_tensor2vec(strain_mat):
     return np.array([strain_mat[0, 0],
                      strain_mat[1, 1],
                      strain_mat[2, 2],
-                     strain_mat[1, 2],
-                     strain_mat[0, 2],
-                     strain_mat[0, 1]]).reshape((6, 1))
+                     strain_mat[1, 2] * 2,
+                     strain_mat[0, 2] * 2,
+                     strain_mat[0, 1] * 2]).reshape((6, 1))
 
 
 def calc_lattice_strain_from_two_theta(init_g_sample, init_two_theta, final_two_theta):

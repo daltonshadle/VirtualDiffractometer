@@ -35,7 +35,7 @@ unitCell_1 = sample_class.UnitCell(np.array([2, 2, 2, 90, 90, 90]))
 
 # Grain_1 parameters (unitCell, dimension, COM, orientation)
 quat_1 = np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3])
-vec_1 = math_func.normalize(np.array([1, 1, .3]))
+vec_1 = math_func.normalize(np.array([0, 1, 0]))
 Grain_1 = sample_class.Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0, 0, 0]), quat_1)
 Grain_1.vector2quat(vec_1)
 
@@ -43,9 +43,9 @@ Grain_1.vector2quat(vec_1)
 Mesh_1 = sample_class.Mesh(Grain_1, 1, 1, 1)
 
 # Sample_1 parameters (grains_list, omegaLow, omegaHigh, omegaStepSize, meshes_list) (degrees)
-omegaLow = 0
-omegaHigh = 180
 omegaStepSize = 5
+omegaLow = 90 - omegaStepSize/2
+omegaHigh = 90 + omegaStepSize/2
 Sample_1 = sample_class.Sample(np.array([Grain_1]), omegaLow, omegaHigh, omegaStepSize,
                                np.array([Mesh_1]))
 
@@ -53,7 +53,7 @@ Sample_1 = sample_class.Sample(np.array([Grain_1]), omegaLow, omegaHigh, omegaSt
 # ************************************* Test Function Definition ***********************************
 def test():
     # initialize hkl vectors and omega_bounds
-    hkl_list = io_func.read_hkl_from_csv("hkl_list_1.csv")
+    hkl_list = io_func.read_hkl_from_csv("hkl_list_3.csv")
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
     display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
 
@@ -86,9 +86,9 @@ def test():
     # print("#3 Elapsed: ", time.time() - t)
 
     # GRAIN WITH STRAIN ----------------------------------------------------------------------------
-    Grain_1.grainStrain = np.array([[.01,  0,   0],
-                                    [0,  0,   0],
-                                    [0,  0,   0]])
+    Sample_1.grains[0].grainStrain = np.array([[.001,  0,   -.001],
+                                               [0,  .001,   0],
+                                               [-.001,  0,   0]])
     print("Starting #1")
     t = time.time()
     # call single crystal rotating diffraction experiment, time is for measuring calculation length
@@ -117,10 +117,16 @@ def test():
     # print("#3 Elapsed: ", time.time() - t)
 
     # STRAIN CALCULATION ---------------------------------------------------------------------------
-    strain_vec = strain_func.calc_strain_from_two_theta(np.transpose(g_sample1),
-                                                        np.transpose(two_theta1),
-                                                        np.transpose(two_theta2))
+    strain_vec = strain_func.calc_lattice_strain_from_two_theta(np.transpose(g_sample1),
+                                                                np.transpose(two_theta1),
+                                                                np.transpose(two_theta2))
 
+    print("Strain_Tensor: \n", strain_func.strain_vec2tensor(strain_vec))
+
+    print("\n\n\n")
+    print(g_sample1)
+    print(two_theta1)
+    print(two_theta2)
 
     return 0
 

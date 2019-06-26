@@ -10,6 +10,7 @@
 # ********************************************* Imports ********************************************
 # Standard Library
 import numpy as np
+import scipy.optimize
 
 
 # *************************************** Function Definitions *************************************
@@ -40,3 +41,25 @@ def normalize_rows(mat_in):
     norm_mat_out = mat_in / norms
 
     return norm_mat_out
+
+
+def mldivide(A, b):
+    # **********************************************************************************************
+    # Name:    mldivide
+    # Purpose: function solves for x in the equation Ax = b using the MATLAB solution of most zeros
+    #          in the solution for under-determined systems
+    # Input:   A (m x n matrix) - matrix to left divide
+    #          b (m x 1 matrix) - solution matrix
+    # Output:  x (n x 1 matrix) - solution for x in the equation Ax = b
+    # Notes:   none
+    # **********************************************************************************************
+
+    # solve of singular value decomposition for A and b
+
+    # NOTE: Cannot use for strain calculation, strain can be negative
+    x, r = scipy.optimize.nnls(A, b)
+
+    b = b.reshape((-1, 1))
+    x = np.linalg.lstsq(A, b, rcond=None)[0]
+    return x
+
