@@ -17,8 +17,9 @@ import utils.math_functions as math_func
 def strain_rosette(lattice_strain, plane_normals):
     # **********************************************************************************************
     # Name:    strain_rosette
-    # Purpose: function that determines the strain vector of a crystal by lattice strains and the
-    #          rosette equations (Paper: L. Margulies et al. / Acta Materialia 50 (2002) 1771–1779)
+    # Purpose: function that determines the strain components vector of a crystal by lattice strains
+    #          and the rosette equations (Paper: L. Margulies et al. / Acta Materialia 50 (2002)
+    #          1771–1779), solves for components in the sample coord system
     # Input:   lattice_strain (m x 1) - lattice strain values
     #          plane_normals (m x 3) - plane normal directions to project strain tensor to
     # Output:  strain_vec (6 x 1) - crystal strain vectors for m lattice strain values in the
@@ -39,14 +40,11 @@ def strain_rosette(lattice_strain, plane_normals):
     cos_matrix = cos_matrix.reshape((-1, 6))
     lattice_strain = lattice_strain.reshape(-1)
 
-    print(plane_normals)
-    print(cos_matrix)
-
     # calculate strain vector
     strain_vec = math_func.mldivide(cos_matrix, lattice_strain)
 
     # account for precision of mldivide
-    precis = 1e-10
+    precis = 1e-6
     strain_vec[(np.where(np.abs(strain_vec) < precis))] = 0
 
     return strain_vec
@@ -88,13 +86,13 @@ def strain_tensor2vec(strain_mat):
 def calc_lattice_strain_from_two_theta(init_g_sample, init_two_theta, final_two_theta):
     # **********************************************************************************************
     # Name:    calc_lattice_strain_from_two_theta
-    # Purpose: function that calculates the lattice strain values based on the two theta values
-    #          at two different load steps
+    # Purpose: function that calculates the strain components based on the two theta values
+    #          at two different load steps, in the sample coord system
     # Input:   init_g_sample (m x 3) - reciprocal lattice vectors in the sample coord system from m
     #                                  diffraction events
     #          init_two_theta (m x 1) - two theta values of the initial load step from m events
     #          final_two_theta (m x 1) - two theta values of the final load step from m events
-    # Output:  lattice_strain (m x 1) - lattice
+    # Output:  strain_vec (6 x 1) - strain components based in the sample coord system
     # Notes:   Units: two theta values are in degrees
     # **********************************************************************************************
 

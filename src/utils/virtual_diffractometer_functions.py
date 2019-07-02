@@ -120,6 +120,19 @@ def djshadle_sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     return [two_theta, eta, k_out_lab, total_omega]
 
 
+def calc_g_sample(grain, hkl_list):
+    # **********************************************************************************************
+    # Name:    calc_g_sample
+    # Purpose: function calculates the reciprocal lattice vectors for a single crystal
+    # Input:   grain (object) - contains grain information
+    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
+    # Output:  g_sample (3 x m) - reciprocal lattice vectors for m hkl planes
+    # Notes:   none
+    # **********************************************************************************************
+    return (grain.quat2rotmat() * grain.reciprocal_strain() *
+            grain.unitCell.get_reciprocal_lattice_vectors() * np.transpose(hkl_list))
+
+
 def calc_omega_rot_diff_exp(g_sample, k_in_lab):
     # **********************************************************************************************
     # Name:    calc_omega_rot_diff_exp
@@ -130,9 +143,13 @@ def calc_omega_rot_diff_exp(g_sample, k_in_lab):
     # Output:  Function outputs a tuple in the form [omega, g_sample]
     #          omega (n x 1 matrix) - omega values for n diffraction events in degrees
     #          g_sample (n x 3 matrix) - reciprocal lattice vectors for n diffraction events
+    #          g_sample_index (n x 1 matrix) - gives indices of g_sample used in n events
     # Notes:   omega and g_sample are indexed such that each row index in omega corresponds to the
     #          same row index in g_sample (ie each omega value is pair with a g_sample vector)
     # **********************************************************************************************
+
+    # initialize g_sample_index, ranging across the values in g_sample
+    g_sample_index = np.array(range(g_sample.shape[1]))
 
     # split into x, y, z in the sample coord system
     g_sample_x = np.transpose(g_sample[0, :])
@@ -169,22 +186,14 @@ def calc_omega_rot_diff_exp(g_sample, k_in_lab):
                             np.add(-minus_omega, -180), zero_omega))
     g_sample_temp = np.hstack((g_sample[:, index2], g_sample[:, index2],
                               g_sample[:, index2], g_sample[:, index2], g_sample[:, index1]))
+    g_sample_index_temp = np.hstack((g_sample_index[index2],
+                                     2 * g_sample.shape[1] + (g_sample_index[index2] + 1),
+                                     3 * g_sample.shape[1] + (g_sample_index[index2] + 1),
+                                     4 * g_sample.shape[1] + (g_sample_index[index2] + 1),
+                                     5 * g_sample.shape[1] + (g_sample_index[index1] + 1)))
     total_omega = np.transpose(total_omega)
 
-    return [total_omega, g_sample_temp]
-
-
-def calc_g_sample(grain, hkl_list):
-    # **********************************************************************************************
-    # Name:    calc_g_sample
-    # Purpose: function calculates the reciprocal lattice vectors for a single crystal
-    # Input:   grain (object) - contains grain information
-    #          hkl_list (m x 3) - contains m hkl plane vectors to interrogate for diffraction event
-    # Output:  g_sample (3 x m) - reciprocal lattice vectors for m hkl planes
-    # Notes:   none
-    # **********************************************************************************************
-    return (grain.quat2rotmat() * grain.reciprocal_strain() *
-            grain.unitCell.get_reciprocal_lattice_vectors() * np.transpose(hkl_list))
+    return [total_omega, g_sample_temp, g_sample_index_temp]
 
 
 def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
@@ -202,6 +211,8 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     #          k_out_lab (n x 3 matrix) - matrix of outgoing scattering vectors for n events (in lab
     #                                     coord system)
     #          total_omega (n x 1 matrix) - omega values for n diffraction events
+    #          g_sample (3 x n matrix) - reciprocal lattice vectors for n events
+    #          g_sample_index (n x 1 matrix) - gives indices of g_sample used in n events
     # Notes:   Units: Angstroms (unit cell and incoming wavelength) and degrees (unit cell, omega
     #          bounds, omega, two_theta, eta)
     # **********************************************************************************************
@@ -211,7 +222,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     g_sample = calc_g_sample(grain, hkl_list)
 
     # calc omega values for rotating diffraction experiment
-    [total_omega, g_sample] = calc_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
+    [total_omega, g_sample, g_sample_index] = calc_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
 
     # complete bounds control for omega bounds
     low_bounds_index = np.where(total_omega < omegabounds[0])[0]
@@ -224,6 +235,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
 
     total_omega = np.delete(total_omega, out_of_bounds_index)
     g_sample = np.delete(g_sample, out_of_bounds_index, 1)
+    g_sample_index = np.delete(g_sample_index, out_of_bounds_index)
 
     # build reciprocal lattice vector list in the lab coord system
     sin_omega = np.sin(np.deg2rad(total_omega))
@@ -252,6 +264,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     g_lab = g_lab[:, index].reshape(3, -1)
     k_out_lab = k_out_lab[:, index]
     k_out_lab = k_out_lab[:, 0]
+    g_sample_index = g_sample_index[index]
 
     # determine two theta and eta
     mag_g = np.linalg.norm(g_sample, axis=0)
@@ -259,7 +272,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     two_theta = np.rad2deg(2 * np.arcsin(np.divide(mag_g, (2 * mag_k_in))))
     eta = np.rad2deg(np.arctan2(k_out_lab[1, :], k_out_lab[0, :]))
 
-    return [two_theta, eta, k_out_lab, total_omega, g_sample]
+    return [two_theta, eta, k_out_lab, total_omega, g_sample, g_sample_index]
 
 
 def multi_crystal_rot_diff_exp(labsource, crystal_list, hkl_list, omegabounds):
@@ -570,15 +583,25 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
     y = np.append(y, [0])
 
     # plot using a scatter
-    fig, ax = plot.subplots(nrows=1, ncols=1)
+    fig, ax = plot.subplots()
     ax.scatter(x, y, marker=".", color="white", s=3)
+    ax.set_facecolor('xkcd:black')
+    ax.set_xlim(-detector.width / 2, detector.width / 2)
+    ax.set_ylim(-detector.height / 2, detector.height / 2)
+    plot.tick_params(
+        axis='both',  # changes apply to the x-axis
+        which='both',  # both major and minor ticks are affected
+        bottom=False,  # ticks along the bottom edge are off
+        left=False,  # ticks along the left edge are off
+        labelbottom=False,  # labels along the bottom edge are off
+        labelleft=False)  # labels along the left edge are off
+
     # adding circle to plot
     if circle:
         [circle_x, circle_y] = add_circle([], [], radius=radius)
         ax.scatter(circle_x, circle_y, marker=".", color="red", s=1)
-    ax.set_facecolor('xkcd:black')
-    plot.xlim(-detector.width / 2, detector.width / 2)
-    plot.ylim(-detector.height / 2, detector.height / 2)
+
+    # show plot
     plot.show()
 
     return 0
@@ -618,6 +641,13 @@ def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
         ax.set_facecolor('xkcd:black')
         ax.set_xlim(-detector.width / 2, detector.width / 2)
         ax.set_ylim(-detector.height / 2, detector.height / 2)
+        plot.tick_params(
+            axis='both',  # changes apply to the x-axis
+            which='both',  # both major and minor ticks are affected
+            bottom=False,  # ticks along the bottom edge are off
+            left=False,  # ticks along the left edge are off
+            labelbottom=False,  # labels along the bottom edge are off
+            labelleft=False)  # labels along the left edge are off
         return scat,
 
     # define update function for plot

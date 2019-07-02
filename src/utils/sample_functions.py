@@ -121,3 +121,53 @@ def mesh_list_from_grain_list(grain_list, mesh_size):
 
     return mesh_list
 
+
+def find_hkl_from_g_sample(g_sample, grain):
+    # **********************************************************************************************
+    # Name:    find_hkl_from_g_sample
+    # Purpose: function computes hkl list from reciprocal lattice vectors in the sample coord system
+    #          by solving Ax=b
+    # Input:   g_sample (3 x m) - m reciprocal lattice vectors in the sample coord system
+    #          grain (obejct) - grain object for grain information
+    # Output:  hkl_list (3 x m matrix) - matrix that holds m the hkl family vectors
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize A matrix, take inverse
+    mat_a = (grain.quat2rotmat() * grain.reciprocal_strain()
+             * grain.unitCell.get_reciprocal_lattice_vectors())
+    mat_a = np.linalg.pinv(mat_a)
+
+    # solve for x, hkl_list
+    hkl_list = mat_a * g_sample
+
+    return hkl_list
+
+
+def match_g_index(g_index1, g_index2):
+    # **********************************************************************************************
+    # Name:    match_g_index
+    # Purpose: function matches g_index values for producing similar spots
+    # Input:   g_index1 (m x 1) - m indices of the g_sample vectors used in rotating diffraction exp
+    #          g_index2 (n x 1) - n indices of the g_sample vectors used in rotating diffraction exp
+    # Output:  index1 (p x 1) - indices for matching g_index in sample 1
+    #          index2 (p x 1) - indices for matching g_index in sample 2
+    # Notes:   none
+    # **********************************************************************************************
+
+    # determine indices where both match one another
+    temp_index1 = np.in1d(g_index1, g_index2)
+    temp_index2 = np.in1d(g_index2, g_index1)
+
+    # create array of indices the size of both g_index
+    index1 = np.array(range(g_index1.shape[0]))
+    index2 = np.array(range(g_index2.shape[0]))
+
+    # keep the indices that are shared in both sets
+    index1 = index1[temp_index1]
+    index2 = index2[temp_index2]
+
+    return index1, index2
+
+
+

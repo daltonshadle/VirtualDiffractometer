@@ -10,7 +10,7 @@
 # ********************************************* Imports ********************************************
 # Standard Library
 import numpy as np
-import scipy.optimize
+import warnings
 
 
 # *************************************** Function Definitions *************************************
@@ -54,12 +54,14 @@ def mldivide(A, b):
     # Notes:   none
     # **********************************************************************************************
 
-    # solve of singular value decomposition for A and b
-
-    # NOTE: Cannot use for strain calculation, strain can be negative
-    x, r = scipy.optimize.nnls(A, b)
-
+    # solve Ax=b for x using least squares method
     b = b.reshape((-1, 1))
     x = np.linalg.lstsq(A, b, rcond=None)[0]
+
+    # check if the system is under-determined, m < n, and throw a warning
+    if A.shape[0] < A.shape[1]:
+        warn_str = ("Under-determined system in utils.math_functions.mldivide: (m, n) = "
+                    + str(A.shape))
+        warnings.warn(warn_str)
     return x
 
