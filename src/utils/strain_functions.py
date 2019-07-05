@@ -74,7 +74,7 @@ def strain_tensor2vec(strain_mat):
     # Notes:   none
     # **********************************************************************************************
 
-    # calculate strain tensor
+    # calculate strain vector
     return np.array([strain_mat[0, 0],
                      strain_mat[1, 1],
                      strain_mat[2, 2],

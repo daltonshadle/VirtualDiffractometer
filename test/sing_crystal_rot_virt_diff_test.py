@@ -53,13 +53,13 @@ process_1 = True
 process_2 = False
 process_3 = True
 process_4 = False
-process_5 = False
+process_5 = True
 
 
 # ************************************* Test Function Definition ***********************************
 def test():
     # initialize hkl vectors and omega_bounds
-    hkl_list = io_func.read_hkl_from_csv("hkl_list_3.csv")
+    hkl_list = io_func.read_hkl_from_csv("hkl_list_10.csv")
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
     display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
 
@@ -116,8 +116,8 @@ def test():
         # call single crystal intercept and display detector to display a diffraction animation
         [zeta, zeta_pix] = virt_diff_func.sing_crystal_find_det_intercept(Detector_1,
                                                                           Sample_1.grains[0].grainCOM,
-                                                                          k_out_lab, new_omega)
-        virt_diff_func.display_detector_bounded_animate(Detector_1, zeta_pix, new_omega,
+                                                                          k_out_lab, omega2)
+        virt_diff_func.display_detector_bounded_animate(Detector_1, zeta_pix, omega2,
                                                         display_omega_bounds)
         print("Process #5 Elapsed: ", time.time() - t)
 
@@ -134,8 +134,8 @@ def test():
                                                                 np.transpose(two_theta1),
                                                                 np.transpose(two_theta2))
 
-    print("Input Strain Tensor: \n", Sample_1.grains[0].grainStrain)
-    print("Output Strain Tensor: \n", strain_func.strain_vec2tensor(strain_vec))
+    print("Input Strain Tensor (Crystal Coord): \n", Sample_1.grains[0].grainStrain)
+    print("Output Strain Tensor (Sample Coord): \n", strain_func.strain_vec2tensor(strain_vec))
 
     return 0
 

@@ -170,4 +170,17 @@ def match_g_index(g_index1, g_index2):
     return index1, index2
 
 
+def structure_factor(hkl_list, unit_cell):
+    # **********************************************************************************************
+    # Name:    structure_factor
+    # Purpose: function determines the structure factor based on hkl and unit cell
+    # Input:   hkl_list (3 x m) - m hkl planes for processing
+    #          unit_cell (object) - unit cell object for processing
+    # Output:  structure_factor (m x 1) - structure factor list of unit cell
+    # Notes:   none
+    # **********************************************************************************************
+
+    return 0
+
+
 
