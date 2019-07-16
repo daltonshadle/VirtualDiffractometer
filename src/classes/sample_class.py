@@ -174,7 +174,7 @@ class Grain:
         # ******************************************************************************************
         # Name:    reciprocal_strain
         # Purpose: function that returns reciprocal strain of the crystal stretched by (I-e) where
-        #          e = grainStrain
+        #          e = grainStrain, in the reciprocal crystal coord system
         # Input:   none
         # Output:  recip_strain (3x3 matrix) - reciprocal strain of the crystal
         # Notes:   none

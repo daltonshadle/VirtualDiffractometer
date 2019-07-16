@@ -24,7 +24,7 @@ detector_size = 20000
 Detector_1 = equip_class.Detector(1000, detector_size, detector_size, 10)
 
 # LabSource parameters (energy, incomingXray) (keV, unitVector)
-LabSource_1 = equip_class.LabSource(55.618, equip_class.LabSource.lab_z)
+LabSource_1 = equip_class.LabSource(61.332, equip_class.LabSource.lab_z)
 
 
 # ************************************* Test Function Definition ***********************************
