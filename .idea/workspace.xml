@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36565a83-f9e2-4e2d-abc2-961cfd862929" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/indexing_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/sample_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/sample_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/strain_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/strain_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,10 +15,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="192" column="91" selection-start-line="192" selection-start-column="91" selection-end-line="192" selection-end-column="91" />
+            <state relative-caret-position="748">
+              <caret line="170" selection-start-line="170" selection-end-line="170" />
               <folding>
                 <element signature="n#!!doc" />
                 <element signature="e#677#689#0" />
@@ -33,39 +40,6 @@
                 <element signature="e#5158#5188#0" />
                 <element signature="e#5993#6711#0" />
                 <element signature="e#5993#6089#0" />
-                <element signature="e#12025#12151#0" />
-                <element signature="e#12789#12884#0" />
-                <element signature="e#13928#15390#0" />
-                <element signature="e#13928#14024#0" />
-                <element signature="e#15164#15359#0" />
-                <element signature="e#15440#16801#0" />
-                <element signature="e#15440#15536#0" />
-                <element signature="e#16884#19703#0" />
-                <element signature="e#16884#16980#0" />
-                <element signature="e#18869#19538#0" />
-                <element signature="e#19802#22263#0" />
-                <element signature="e#19802#19898#0" />
-                <element signature="e#21728#22202#0" />
-                <element signature="e#22345#24265#0" />
-                <element signature="e#22345#22441#0" />
-                <element signature="e#24362#26502#0" />
-                <element signature="e#24362#24458#0" />
-                <element signature="e#25995#26457#0" />
-                <element signature="e#26578#27864#0" />
-                <element signature="e#26578#26674#0" />
-                <element signature="e#27562#27687#0" />
-                <element signature="e#27969#29900#0" />
-                <element signature="e#27969#28065#0" />
-                <element signature="e#29159#29291#0" />
-                <element signature="e#29220#29291#0" />
-                <element signature="e#29986#32688#0" />
-                <element signature="e#29986#30082#0" />
-                <element signature="e#31696#32448#0" />
-                <element signature="e#31991#32108#0" />
-                <element signature="e#32033#32108#0" />
-                <element signature="e#32739#33673#0" />
-                <element signature="e#32739#32835#0" />
-                <element signature="e#33543#33654#0" />
               </folding>
             </state>
           </provider>
@@ -74,7 +48,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/strain_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="586">
+            <state relative-caret-position="1258">
               <caret line="76" column="29" selection-start-line="76" selection-start-column="29" selection-end-line="76" selection-end-column="29" />
               <folding>
                 <element signature="e#534#552#0" expanded="true" />
@@ -95,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1283">
-              <caret line="105" column="47" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
+            <state relative-caret-position="501">
+              <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
               <folding>
                 <element signature="e#559#577#0" expanded="true" />
               </folding>
@@ -107,7 +81,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/utils/sample_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
+            <state relative-caret-position="1190">
               <caret line="178" column="76" selection-start-line="178" selection-start-column="76" selection-end-line="178" selection-end-column="76" />
               <folding>
                 <element signature="n#!!doc" />
@@ -131,8 +105,6 @@
                 <element signature="e#4652#4796#0" />
                 <element signature="e#4933#5613#0" />
                 <element signature="e#4933#5029#0" />
-                <element signature="e#5671#5679#0" />
-                <element signature="e#6621#7455#0" />
               </folding>
             </state>
           </provider>
@@ -195,15 +167,15 @@
         <option value="$PROJECT_DIR$/src/utils/csv_functions.py" />
         <option value="$PROJECT_DIR$/src/classes/equipment_class.py" />
         <option value="$PROJECT_DIR$/src/utils/io_functions.py" />
-        <option value="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" />
         <option value="$PROJECT_DIR$/test/sample_class_test.py" />
         <option value="$PROJECT_DIR$/src/utils/math_functions.py" />
         <option value="$PROJECT_DIR$/src/classes/sample_class.py" />
         <option value="$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py" />
         <option value="$PROJECT_DIR$/src/utils/strain_functions.py" />
-        <option value="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" />
         <option value="$PROJECT_DIR$/src/utils/indexing_functions.py" />
         <option value="$PROJECT_DIR$/src/utils/sample_functions.py" />
+        <option value="$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py" />
+        <option value="$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py" />
       </list>
     </option>
   </component>
@@ -218,6 +190,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -251,7 +224,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -283,7 +255,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.sing_crystal_rot_virt_diff_test">
+  <component name="RunManager" selected="Python.multi_crystal_rot_virt_diff_test">
     <configuration name="multi_crystal_rot_virt_diff_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="VirtualDiffractometer" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -354,8 +326,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.sing_crystal_rot_virt_diff_test" />
         <item itemvalue="Python.multi_crystal_rot_virt_diff_test" />
+        <item itemvalue="Python.sing_crystal_rot_virt_diff_test" />
         <item itemvalue="Python.sample_class_test" />
       </list>
     </recent_temporary>
@@ -375,14 +347,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1088" y="-1153" width="1096" height="1896" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1899811" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1899811" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32794198" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3182076" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3182076" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39931935" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -448,13 +419,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="68" column="43" selection-start-line="68" selection-start-column="43" selection-end-line="68" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/classes/sample_class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1821">
@@ -462,10 +426,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/multi_crystal_rot_virt_diff_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/virtual_diffractometer_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="192" column="91" selection-start-line="192" selection-start-column="91" selection-end-line="192" selection-end-column="91" />
+        <state relative-caret-position="748">
+          <caret line="170" selection-start-line="170" selection-end-line="170" />
           <folding>
             <element signature="n#!!doc" />
             <element signature="e#677#689#0" />
@@ -478,60 +449,24 @@
             <element signature="e#5158#5188#0" />
             <element signature="e#5993#6711#0" />
             <element signature="e#5993#6089#0" />
-            <element signature="e#12025#12151#0" />
-            <element signature="e#12789#12884#0" />
-            <element signature="e#13928#15390#0" />
-            <element signature="e#13928#14024#0" />
-            <element signature="e#15164#15359#0" />
-            <element signature="e#15440#16801#0" />
-            <element signature="e#15440#15536#0" />
-            <element signature="e#16884#19703#0" />
-            <element signature="e#16884#16980#0" />
-            <element signature="e#18869#19538#0" />
-            <element signature="e#19802#22263#0" />
-            <element signature="e#19802#19898#0" />
-            <element signature="e#21728#22202#0" />
-            <element signature="e#22345#24265#0" />
-            <element signature="e#22345#22441#0" />
-            <element signature="e#24362#26502#0" />
-            <element signature="e#24362#24458#0" />
-            <element signature="e#25995#26457#0" />
-            <element signature="e#26578#27864#0" />
-            <element signature="e#26578#26674#0" />
-            <element signature="e#27562#27687#0" />
-            <element signature="e#27969#29900#0" />
-            <element signature="e#27969#28065#0" />
-            <element signature="e#29159#29291#0" />
-            <element signature="e#29220#29291#0" />
-            <element signature="e#29986#32688#0" />
-            <element signature="e#29986#30082#0" />
-            <element signature="e#31696#32448#0" />
-            <element signature="e#31991#32108#0" />
-            <element signature="e#32033#32108#0" />
-            <element signature="e#32739#33673#0" />
-            <element signature="e#32739#32835#0" />
-            <element signature="e#33543#33654#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1283">
-          <caret line="105" column="47" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
-          <folding>
-            <element signature="e#559#577#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/strain_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
+        <state relative-caret-position="1258">
           <caret line="76" column="29" selection-start-line="76" selection-start-column="29" selection-end-line="76" selection-end-column="29" />
           <folding>
             <element signature="e#534#552#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/indexing_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
@@ -545,16 +480,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/indexing_functions.py">
+    <entry file="file://$PROJECT_DIR$/test/sing_crystal_rot_virt_diff_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="501">
+          <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+          <folding>
+            <element signature="e#559#577#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/sample_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
+        <state relative-caret-position="1190">
           <caret line="178" column="76" selection-start-line="178" selection-start-column="76" selection-end-line="178" selection-end-column="76" />
           <folding>
             <element signature="n#!!doc" />
@@ -578,8 +516,6 @@
             <element signature="e#4652#4796#0" />
             <element signature="e#4933#5613#0" />
             <element signature="e#4933#5029#0" />
-            <element signature="e#5671#5679#0" />
-            <element signature="e#6621#7455#0" />
           </folding>
         </state>
       </provider>

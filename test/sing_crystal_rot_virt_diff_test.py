@@ -27,14 +27,14 @@ detector_size = 20000
 Detector_1 = equip_class.Detector(1000, detector_size, detector_size, 10)
 
 # LabSource_1 parameters (energy, incomingXray) (keV, unitVector)
-LabSource_1 = equip_class.LabSource(55, equip_class.LabSource.lab_z)
+LabSource_1 = equip_class.LabSource(61.332, equip_class.LabSource.lab_z)
 
 # unitCell_1 lattice parameters (a, b, c, alpha, beta, gamma) (Angstroms, degrees)
 unitCell_1 = sample_class.UnitCell(np.array([2, 2, 2, 90, 90, 90]))
 
 # Grain_1 parameters (unitCell, dimension, COM, orientation)
 quat_1 = np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3])
-vec_1 = math_func.normalize(np.array([0, 1, 0]))
+vec_1 = math_func.normalize(np.array([1, 1, 1]))
 Grain_1 = sample_class.Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0, 0, 0]), quat_1)
 Grain_1.vector2quat(vec_1)
 
@@ -43,14 +43,14 @@ Mesh_1 = sample_class.Mesh(Grain_1, 1, 1, 1)
 
 # Sample_1 parameters (grains_list, omegaLow, omegaHigh, omegaStepSize, meshes_list) (degrees)
 omegaStepSize = 5
-omegaLow = 5 - omegaStepSize/2
-omegaHigh = 175 + omegaStepSize/2
+omegaLow = 2.5 - omegaStepSize/2
+omegaHigh = 177.5 + omegaStepSize/2
 Sample_1 = sample_class.Sample(np.array([Grain_1]), omegaLow, omegaHigh, omegaStepSize,
                                np.array([Mesh_1]))
 
 # Display options
 process_1 = True
-process_2 = False
+process_2 = True
 process_3 = True
 process_4 = False
 process_5 = True
