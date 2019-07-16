@@ -557,10 +557,10 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
     # Input:   detector (object) - holds all detector info
     #          zeta_pix (n x 2 matrix) - holds the position vectors (x,y) of pixels on the detector
     #                                    where n events occurred
-    #          omega (n x 1) matrix - holds the omega values for n diffraction events
+    #          omega (n x 1 matrix) - holds the omega values for n diffraction events
     #          omega_bounds (tuple) - holds bounds for omega and thresholds what events to display,
     #                                 takes the form [omega_low, omega_high]
-    # Output:  Scatter plot image of the diffraction events
+    # Output:  plot (matplotlib object) - scatter plot image of the diffraction events
     # Notes:   none
     # **********************************************************************************************
 
@@ -584,6 +584,7 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
 
     # plot using a scatter
     fig, ax = plot.subplots()
+    fig.set_size_inches(10, 10)
     ax.scatter(x, y, marker=".", color="white", s=3)
     ax.set_facecolor('xkcd:black')
     ax.set_xlim(-detector.width / 2, detector.width / 2)
@@ -604,7 +605,7 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
     # show plot
     plot.show()
 
-    return 0
+    return fig
 
 
 def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
@@ -618,7 +619,7 @@ def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
     #          omega (n x 1) matrix - holds the omega values for n diffraction events
     #          omega_bounds (tuple) - holds bounds for omega and thresholds what events to display,
     #                                 takes the form [omega_low, omega_high, omega_step_size]
-    # Output:  Animated scatter plot image of the diffraction events
+    # Output:  ani (matplotlib object) - animated scatter plot image of the diffraction events
     # Notes:   none
     # **********************************************************************************************
 
@@ -634,6 +635,7 @@ def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
 
     # initialize animation plots
     fig, ax = plot.subplots()
+    fig.set_size_inches(10, 10)
     scat = ax.scatter([], [], marker=".", color="white", s=3)
 
     # define init function for plot
@@ -678,9 +680,11 @@ def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
     ani = plot_ani.FuncAnimation(fig, update,
                                  frames=np.linspace(omega_low, omega_high, omega_steps),
                                  init_func=init, blit=True, repeat=False)
+
+    # show plot
     plot.show()
 
-    return 0
+    return ani
 
 
 def add_circle(x, y, radius=1, points=100):

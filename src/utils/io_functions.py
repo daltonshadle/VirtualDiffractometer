@@ -11,6 +11,8 @@
 import numpy as np
 import pathlib
 import csv
+import matplotlib as plot
+import cv2
 # My Library
 import definitions
 import classes.sample_class as sample_class
@@ -92,3 +94,99 @@ def read_grains_from_csv(filename):
             line_count += 1
         print(f'Processed {line_count} grains.')
     return grain_list
+
+
+def save_matplotlib_plot(save_plot, filename='fig_1', extension='.png', tight=False):
+    # **********************************************************************************************
+    # Name:    save_matplotlib_plot
+    # Purpose: function saves matplotlib plot to img directory
+    # Input:   save_plot (matplotlib object) - plot object to save as image
+    #          filename (string) - string of filename to save to
+    #          extension (string) - extension of file type to save to
+    #          tight (bool) - option for saving just the plot area of plot
+    # Output:  none
+    # Notes:   none
+    # **********************************************************************************************
+
+    # combine filename and extension
+    path = IMG_PATH
+    path = path / (filename + extension)
+
+    print(path)
+
+    # check if plot is to be saved as tight and save accordingly
+    if tight:
+        save_plot.savefig(path, bbox_inches='tight', pad_inches=0)
+    else:
+        save_plot.savefig(path, pad_inches=0)
+
+
+def save_matplotlib_ani(save_ani, filename='fig_1', extension='.gif', tight=False):
+    # **********************************************************************************************
+    # Name:    save_matplotlib_plot
+    # Purpose: function saves matplotlib animation to img directory
+    # Input:   save_ani (matplotlib object) - animation object to save
+    #          filename (string) - string of filename to save to
+    #          extension (string) - extension of file type to save to
+    #          tight (bool) - option for saving just the plot area of plot
+    # Output:  none
+    # Notes:   none
+    # **********************************************************************************************
+
+    # combine filename and extension
+    path = IMG_PATH
+    path = path / (filename + extension)
+
+    print(path)
+
+    # check if plot is to be saved as tight and save accordingly
+    if tight:
+        save_ani.save(path, writer='imagemagick', fps=5, bbox_inches='tight')
+    else:
+        save_ani.save(path, writer='imagemagick', fps=5)
+
+
+def read_image_to_array(image_path):
+    # **********************************************************************************************
+    # Name:    read_image_to_array
+    # Purpose: function reads image to numpy array
+    # Input:   image_path (string) - path to image for reading to array
+    # Output:  image_array (n x m x 4) - array of image pixel locations and RGBA values
+    # Notes:   none
+    # **********************************************************************************************
+
+    # import image
+    image_array = cv2.im
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
