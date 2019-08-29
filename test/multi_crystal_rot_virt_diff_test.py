@@ -30,7 +30,7 @@ LabSource_1 = equip_class.LabSource(61.332, equip_class.LabSource.lab_z)
 # ************************************* Test Function Definition ***********************************
 def test():
     # initialize grain and mesh list
-    mesh_size = 1
+    mesh_size = 6
     grain_list = io_func.read_grains_from_csv("multi_grains_15.csv")
     mesh_list = sample_func.mesh_list_from_grain_list(grain_list, mesh_size)
 
@@ -42,8 +42,8 @@ def test():
                                    np.array(mesh_list))
 
     # initialize hkl vectors and omega_bounds
-    hkl_list = io_func.read_hkl_from_csv("hkl_list_1.csv")
-    hkl_list = sample_func.gen_hkl_fam_from_list(hkl_list, cubic=True)
+    hkl_list = sample_func.create_fcc_hkl_list(10)
+    hkl_list = sample_func.create_bcc_hkl_list(2)
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
     display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
 

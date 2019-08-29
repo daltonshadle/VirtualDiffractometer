@@ -183,4 +183,53 @@ def structure_factor(hkl_list, unit_cell):
     return 0
 
 
+def create_fcc_hkl_list(hkl_int):
+    # **********************************************************************************************
+    # Name:    create_fcc_hkl_list
+    # Purpose: function create the diffraction hkl list for fcc crystals
+    # Input:   hkl_int (int) - highest Miller index
+    # Output:  fcc_hkl_list (3 x m) - hkl list for diffracting fcc crystals
+    # Notes:   none
+    # **********************************************************************************************
 
+    # initialize return variable
+    fcc_hkl_list = np.zeros((1, 3))
+
+    # iterate over all possible hkl combinations
+    for m in range(-hkl_int, hkl_int + 1, 1):
+        for n in range(-hkl_int, hkl_int + 1, 1):
+            for o in range(-hkl_int, hkl_int + 1, 1):
+                # check if hkl combination meets fcc criteria (all odd or all even)
+                if (m%2 == 0 and n%2 == 0 and o%2 == 0) or (m%2 == 1 and n%2 == 1 and o%2 == 1):
+                    temp_hkl = np.array([m, n, o])
+                    fcc_hkl_list = np.vstack((fcc_hkl_list, temp_hkl))
+
+    # return value, remove first row of zeroes
+    fcc_hkl_list = np.delete(fcc_hkl_list, 0, axis=0)
+    return fcc_hkl_list
+
+
+def create_bcc_hkl_list(hkl_int):
+    # **********************************************************************************************
+    # Name:    create_bcc_hkl_list
+    # Purpose: function create the diffraction hkl list for bcc crystals
+    # Input:   hkl_int (int) - highest Miller index
+    # Output:  bcc_hkl_list (3 x m) - hkl list for diffracting bcc crystals
+    # Notes:   none
+    # **********************************************************************************************
+
+    # initialize return variable
+    bcc_hkl_list = np.zeros((1, 3))
+
+    # iterate over all possible hkl combinations
+    for m in range(-hkl_int, hkl_int + 1, 1):
+        for n in range(-hkl_int, hkl_int + 1, 1):
+            for o in range(-hkl_int, hkl_int + 1, 1):
+                # check if hkl combination meets fcc criteria (h+k+l = even number)
+                if (m + n + o)%2 == 0:
+                    temp_hkl = np.array([m, n, o])
+                    bcc_hkl_list = np.vstack((bcc_hkl_list, temp_hkl))
+
+    # return value, remove first row of zeroes
+    bcc_hkl_list = np.delete(bcc_hkl_list, 0, axis=0)
+    return bcc_hkl_list

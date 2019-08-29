@@ -12,7 +12,6 @@ import numpy as np
 import pathlib
 import csv
 import matplotlib as plot
-import cv2
 # My Library
 import definitions
 import classes.sample_class as sample_class
@@ -156,10 +155,24 @@ def read_image_to_array(image_path):
     # **********************************************************************************************
 
     # import image
-    image_array = cv2.im
+    print("Read Image")
 
 
+def write_hkl_to_csv(hkl_list, filename):
+    # **********************************************************************************************
+    # Name:    write_hkl_to_csv
+    # Purpose: function that reads the hkl vector list from csv and returns as list
+    # Input:   hkl_list (3 x n) - matrix that holds all the hkl vectors from csv file
+    #          filename (string) - filename of the data to save
+    # Output:  csv file with hkl list stored
+    # Notes:   none
+    # **********************************************************************************************
 
+    # initialize path
+    file_path = DATA_PATH / filename + '.csv'
+
+    # save to csv
+    np.savetxt(file_path, hkl_list, delimiter=',')
 
 
 

@@ -14,6 +14,7 @@ import numpy as np
 import classes.sample_class as sample_class
 import utils.strain_functions as strain_func
 import utils.math_functions as math_func
+import utils.sample_functions as sample_func
 
 
 # *************************************** Variable Definitions *************************************
@@ -44,6 +45,8 @@ def test():
 
     rose = strain_func.strain_rosette(strain, planes)
 
+    temp_list = sample_func.create_fcc_hkl_list(5)
+    print(temp_list)
 
     return 0
 

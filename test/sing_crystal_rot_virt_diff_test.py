@@ -34,12 +34,12 @@ unitCell_1 = sample_class.UnitCell(np.array([2, 2, 2, 90, 90, 90]))
 
 # Grain_1 parameters (unitCell, dimension, COM, orientation)
 quat_1 = np.array([7.356e-1, 6.616e-1, 1.455e-1, -8.024e-3])
-vec_1 = math_func.normalize(np.array([1, 1, 1]))
+vec_1 = math_func.normalize(np.array([.3, .7, .4]))
 Grain_1 = sample_class.Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0, 0, 0]), quat_1)
 Grain_1.vector2quat(vec_1)
 
 # Mesh_1 parameters (grain, numX, numY, numZ)
-Mesh_1 = sample_class.Mesh(Grain_1, 1, 1, 1)
+Mesh_1 = sample_class.Mesh(Grain_1, 5, 5, 5)
 
 # Sample_1 parameters (grains_list, omegaLow, omegaHigh, omegaStepSize, meshes_list) (degrees)
 omegaStepSize = 5
@@ -59,7 +59,7 @@ process_5 = True
 # ************************************* Test Function Definition ***********************************
 def test():
     # initialize hkl vectors and omega_bounds
-    hkl_list = io_func.read_hkl_from_csv("hkl_list_10.csv")
+    hkl_list = sample_func.create_fcc_hkl_list(10)
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
     display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
 
