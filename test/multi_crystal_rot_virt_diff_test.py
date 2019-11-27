@@ -42,8 +42,7 @@ def test():
                                    np.array(mesh_list))
 
     # initialize hkl vectors and omega_bounds
-    hkl_list = sample_func.create_fcc_hkl_list(10)
-    hkl_list = sample_func.create_bcc_hkl_list(2)
+    hkl_list = sample_func.create_bcc_hkl_list(5)
     omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
     display_omega_bounds = [Sample_1.omegaLow, Sample_1.omegaHigh, Sample_1.omegaStepSize]
 
@@ -73,12 +72,12 @@ def test():
     # call display_detector for generating a diffraction image
     diffract_plot = virt_diff_func.display_detector_bounded(Detector_1, zeta_pix, new_omega, display_omega_bounds)
     diffract_plot.set_size_inches(10, 10)
-    io_func.save_matplotlib_plot(diffract_plot, filename='new_diff_plot', extension='.png', tight=True)
+    #io_func.save_matplotlib_plot(diffract_plot, filename='new_diff_plot', extension='.png', tight=True)
 
     # call display_detector for generating a diffraction animation
     diffract_ani = virt_diff_func.display_detector_bounded_animate(Detector_1, zeta_pix, new_omega,
                                                                    display_omega_bounds)
-    io_func.save_matplotlib_ani(diffract_ani, filename='new_diff_ani', extension='.gif')
+    #io_func.save_matplotlib_ani(diffract_ani, filename='new_diff_ani', extension='.gif')
 
     return 0
 

@@ -19,7 +19,7 @@ import utils.math_functions as math_func
 
 # *************************************** Variable Definitions *************************************
 DATA_PATH = pathlib.Path(definitions.ROOT_DIR + "/data/")
-IMG_PATH = pathlib.Path(definitions.ROOT_DIR + "/img/")
+IMG_PATH = pathlib.Path(definitions.ROOT_DIR + "/img/Shear_Cryst_XY_Fig/")
 SRC_PATH = pathlib.Path(definitions.ROOT_DIR + "/src/")
 TEST_PATH = pathlib.Path(definitions.ROOT_DIR + "/test/")
 

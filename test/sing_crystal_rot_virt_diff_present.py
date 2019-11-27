@@ -39,7 +39,7 @@ Grain_1 = sample_class.Grain(unitCell_1, np.array([1.0, 1.0, 1.0]), np.array([0,
 Grain_1.vector2quat(vec_1)
 
 # Mesh_1 parameters (grain, numX, numY, numZ)
-Mesh_1 = sample_class.Mesh(Grain_1, 5, 5, 5)
+Mesh_1 = sample_class.Mesh(Grain_1, 1, 1, 1)
 
 # Sample_1 parameters (grains_list, omegaLow, omegaHigh, omegaStepSize, meshes_list) (degrees)
 omegaStepSize = 5
@@ -51,9 +51,9 @@ Sample_1 = sample_class.Sample(np.array([Grain_1]), omegaLow, omegaHigh, omegaSt
 # Display options
 process_1 = True
 process_2 = True
-process_3 = True
+process_3 = False
 process_4 = False
-process_5 = True
+process_5 = False
 
 
 # ************************************* Test Function Definition ***********************************

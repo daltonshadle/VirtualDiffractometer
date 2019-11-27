@@ -233,3 +233,17 @@ def create_bcc_hkl_list(hkl_int):
     # return value, remove first row of zeroes
     bcc_hkl_list = np.delete(bcc_hkl_list, 0, axis=0)
     return bcc_hkl_list
+
+def create_grain_list():
+    # **********************************************************************************************
+    # Name:    create_grain_list
+    # Purpose: function creates grain list from parameters for a sample
+    # Input:   hkl_int (int) - highest Miller index
+    # Output:  bcc_hkl_list (3 x m) - hkl list for diffracting bcc crystals
+    # Notes:   none
+    # **********************************************************************************************
+
+    return 0
+
+
+

@@ -560,7 +560,8 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
     #          omega (n x 1 matrix) - holds the omega values for n diffraction events
     #          omega_bounds (tuple) - holds bounds for omega and thresholds what events to display,
     #                                 takes the form [omega_low, omega_high]
-    # Output:  plot (matplotlib object) - scatter plot image of the diffraction events
+    # Output:  fig (matlibplot object) - figure of scatter plot
+    #          plot (matplotlib object) - scatter plot image of the diffraction events
     # Notes:   none
     # **********************************************************************************************
 
@@ -602,10 +603,7 @@ def display_detector_bounded(detector, zeta_pix, omega, omega_bounds, circle=Fal
         [circle_x, circle_y] = add_circle([], [], radius=radius)
         ax.scatter(circle_x, circle_y, marker=".", color="red", s=1)
 
-    # show plot
-    plot.show()
-
-    return fig
+    return [fig, plot]
 
 
 def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
