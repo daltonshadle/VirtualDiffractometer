@@ -133,14 +133,14 @@ def calc_g_sample(grain, hkl_list):
             grain.unitCell.get_reciprocal_lattice_vectors() * np.transpose(hkl_list))
 
 
-def calc_omega_rot_diff_exp(g_sample, k_in_lab):
+def calc_omega_rot_diff_exp(g_sample, k_in_lab, hkl_list):
     # **********************************************************************************************
     # Name:    calc_omega_rot_diff_exp
     # Purpose: function that calculates omega values given reciprocal lattice vectors and wavelength
     # Input:   g_sample (3 x m matrix) - contains reciprocal lattice vectors in the sample coord
     #                                    system to calc omega values for
     #          k_in_lab (1 x 3 vector) - vector of the incoming x-ray in the lab coord system
-    # Output:  Function outputs a tuple in the form [omega, g_sample]
+    # Output:  Function outputs a tuple in the form [omega, g_sample, g_sample_index]
     #          omega (n x 1 matrix) - omega values for n diffraction events in degrees
     #          g_sample (n x 3 matrix) - reciprocal lattice vectors for n diffraction events
     #          g_sample_index (n x 1 matrix) - gives indices of g_sample used in n events
@@ -162,19 +162,23 @@ def calc_omega_rot_diff_exp(g_sample, k_in_lab):
     a = np.power(g_sample_x, 2) + np.power(g_sample_z, 2)
     b = 2 * np.multiply(Y, g_sample_x)
     c = np.power(Y, 2) - np.power(g_sample_z, 2)
-    rad = np.sqrt((np.power(b, 2) - 4 * np.multiply(a, c)))
 
-    # find solution indices for quadratic formula (index1 = 1 solution & index2 = 2 solutions)
+    in_rad = np.power(b, 2) - 4 * np.multiply(a, c)
+
+    # find solution indices for quadratic formula (index1 = 1 solution & index2 = 2 solutions &
+    #     index3 removes all a=0 from index1)
     precis = 1E-6
-    index1 = np.where(np.abs(rad < precis))[0]
-    index2 = np.where(np.abs(rad >= precis))[0]
+
+    index1 = np.where(abs(in_rad) < precis)[0]
+    index2 = np.where(in_rad >= precis)[0]
+    index3 = np.where(in_rad[index1] > precis)[0]
+
+    rad = np.sqrt(np.take(in_rad, index2)).transpose()
 
     # calculate solution of quadratic formula and find omega values (in degrees)
-    plus_solution = np.divide((-np.take(b, index2) + np.take(rad, index2)),
-                              (2 * np.take(a, index2)))
-    minus_solution = np.divide((-np.take(b, index2) - np.take(rad, index2)),
-                               (2 * np.take(a, index2)))
-    zero_solution = np.divide(-np.take(b, index1), (2 * np.take(a, index1)))
+    plus_solution = (-b[index2] + rad)/(2 * a[index2])
+    minus_solution = (-b[index2] - rad)/(2 * a[index2])
+    zero_solution = (-b[index3])/(2 * a[index3])
 
     plus_omega = np.array(np.rad2deg(np.real(np.arcsin(plus_solution))))
     minus_omega = np.array(np.rad2deg(np.real(np.arcsin(minus_solution))))
@@ -182,16 +186,15 @@ def calc_omega_rot_diff_exp(g_sample, k_in_lab):
 
     # gather all omega solutions and reciprocal lattice vectors in the sample frame, the 180 factor
     # is for finding all possible omega values
-    total_omega = np.hstack((plus_omega, np.add(-plus_omega, 180), minus_omega,
+    total_omega = np.vstack((plus_omega, np.add(-plus_omega, 180), minus_omega,
                             np.add(-minus_omega, -180), zero_omega))
     g_sample_temp = np.hstack((g_sample[:, index2], g_sample[:, index2],
-                              g_sample[:, index2], g_sample[:, index2], g_sample[:, index1]))
+                              g_sample[:, index2], g_sample[:, index2], g_sample[:, index3]))
     g_sample_index_temp = np.hstack((g_sample_index[index2],
                                      2 * g_sample.shape[1] + (g_sample_index[index2] + 1),
                                      3 * g_sample.shape[1] + (g_sample_index[index2] + 1),
                                      4 * g_sample.shape[1] + (g_sample_index[index2] + 1),
-                                     5 * g_sample.shape[1] + (g_sample_index[index1] + 1)))
-    total_omega = np.transpose(total_omega)
+                                     5 * g_sample.shape[1] + (g_sample_index[index3] + 1)))
 
     return [total_omega, g_sample_temp, g_sample_index_temp]
 
@@ -222,7 +225,7 @@ def sing_crystal_rot_diff_exp(labsource, grain, hkl_list, omegabounds):
     g_sample = calc_g_sample(grain, hkl_list)
 
     # calc omega values for rotating diffraction experiment
-    [total_omega, g_sample, g_sample_index] = calc_omega_rot_diff_exp(g_sample, labsource.k_in_lab)
+    [total_omega, g_sample, g_sample_index] = calc_omega_rot_diff_exp(g_sample, labsource.k_in_lab, hkl_list)
 
     # complete bounds control for omega bounds
     low_bounds_index = np.where(total_omega < omegabounds[0])[0]
@@ -673,6 +676,7 @@ def display_detector_bounded_animate(detector, zeta_pix, omega, omega_bounds):
         # set data for plot
         data = np.hstack((x, y))
         scat.set_offsets(data)
+
         return scat,
 
     ani = plot_ani.FuncAnimation(fig, update,

@@ -31,7 +31,7 @@ class UnitCell:
     # Constructor
     def __init__(self, lattice_params_in):
         # Round precision variable for lattice vectors
-        precision = 15
+        precision = 14
 
         self.latticeParams = lattice_params_in
         a = self.latticeParams[0]
@@ -135,7 +135,7 @@ class Grain:
         # Purpose: function that sets orientation quaternion from an orientation vector in the
         #          sample coord system
         # Input:   orient_vec (3x1 vector) - orientation vector in the sample coord system, where
-        #                                    the other vector is sample vector [0, 1, 0] (up in
+        #                                    the other vector is sample vector [0, 1, 0] (+y in
         #                                    loading dir)
         # Output:  none
         # Notes:   none

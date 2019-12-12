@@ -200,7 +200,8 @@ def create_fcc_hkl_list(hkl_int):
         for n in range(-hkl_int, hkl_int + 1, 1):
             for o in range(-hkl_int, hkl_int + 1, 1):
                 # check if hkl combination meets fcc criteria (all odd or all even)
-                if (m%2 == 0 and n%2 == 0 and o%2 == 0) or (m%2 == 1 and n%2 == 1 and o%2 == 1):
+                if ((m%2 == 0 and n%2 == 0 and o%2 == 0) or (m%2 == 1 and n%2 == 1 and o%2 == 1)) \
+                        and (abs(m) + abs(n) + abs(o)) != 0:
                     temp_hkl = np.array([m, n, o])
                     fcc_hkl_list = np.vstack((fcc_hkl_list, temp_hkl))
 
@@ -226,7 +227,7 @@ def create_bcc_hkl_list(hkl_int):
         for n in range(-hkl_int, hkl_int + 1, 1):
             for o in range(-hkl_int, hkl_int + 1, 1):
                 # check if hkl combination meets fcc criteria (h+k+l = even number)
-                if (m + n + o)%2 == 0:
+                if (m + n + o)%2 == 0 and (abs(m) + abs(n) + abs(o)) != 0:
                     temp_hkl = np.array([m, n, o])
                     bcc_hkl_list = np.vstack((bcc_hkl_list, temp_hkl))
 

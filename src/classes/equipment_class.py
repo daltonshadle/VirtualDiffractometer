@@ -29,7 +29,7 @@ class LabSource:
     # Constructor
     def __init__(self, energy_in, incoming_in):
         self.beamEnergy = energy_in
-        self.k_in_lab = ((2 * sciconst.pi) / self.kev_2_angstroms()) * (-1 * incoming_in)
+        self.k_in_lab = ((2 * sciconst.pi) / self.kev_2_angstroms()) * incoming_in
 
     # Other Functions
     def kev_2_angstroms(self):

@@ -50,8 +50,8 @@ Sample_1 = sample_class.Sample(np.array([Grain_1]), omegaLow, omegaHigh, omegaSt
                                np.array([Mesh_1]))
 
 # Display options
-process_1 = True
-process_2 = True
+process_1 = False
+process_2 = False
 process_3 = False
 process_4 = False
 process_5 = False
